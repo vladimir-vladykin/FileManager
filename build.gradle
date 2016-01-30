@@ -23,6 +23,8 @@ ext {
             butterknife         : "7.0.1",
             dialogs             : "0.8.4.2@aar",
             tinyDancer          : "0.0.9",
+            stetho              : "1.3.0",
+            leakcanary          : "1.3.1"
     ]
 }
 

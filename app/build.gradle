@@ -63,6 +63,8 @@ dependencies {
 
     // debug tools
     debugCompile "com.github.brianPlummer:tinydancer:${libraries.tinyDancer}"
+    debugCompile "com.facebook.stetho:stetho:${libraries.stetho}"
+    debugCompile "com.squareup.leakcanary:leakcanary-android:${libraries.leakcanary}"
 }
 
 retrolambda {
