@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="margin_normal">16dp</dimen>
+
+    <!-- FileListFragment -->
+    <dimen name="file_update_button_size">60dp</dimen>
+
+    <!-- Font sizes -->
+    <dimen name="empty_text_size">22sp</dimen>
+    <dimen name="font_normal">16sp</dimen>
+    <dimen name="font_middle">20sp</dimen>
+
+    <!-- Context menu -->
+    <dimen name="context_dialog_width">240dp</dimen>
+</resources>

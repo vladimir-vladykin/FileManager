@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FileManager</string>
+
+    <!-- Actions -->
+    <string name="action_settings">Settings</string>
+    <string name="action_new_folder">Новая папка</string>
+    <string name="action_new_file">Новый файл</string>
+    <string name="action_sort">Сортировать</string>
+    <string name="action_insert">Вставить</string>
+    <string name="action_update">Обновить</string>
+
+    <!-- Texts -->
+    <string name="error">Ошибка</string>
+    <string name="empty_list">Пусто</string>
+    <string name="no_app">Не найденно подходящей программы для открытия этого файла.</string>
+    <string name="file_cannot_delete">Не удалось удалить файл</string>
+    <string name="file_cannot_rename">Не удалось переименовать файл</string>
+
+    <string name="ok">OK</string>
+
+    <string name="enter_new_name">Введите новое имя:</string>
+    <string name="enter_file_name">Введите имя нового файла:</string>
+    <string name="enter_directory_name">Введите имя новой папки:</string>
+    <string name="new_name">Новое имя</string>
+    <string name="file_name">Имя файла</string>
+    <string name="directory_name">Имя папки</string>
+
+    <!-- Context dialog -->
+    <string name="open">Открыть</string>
+    <string name="copy">Копировать</string>
+    <string name="move">Переместить</string>
+    <string name="rename">Переименовать</string>
+    <string name="remove">Удалить</string>
+</resources>

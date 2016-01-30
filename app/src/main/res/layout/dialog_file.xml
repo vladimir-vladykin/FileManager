@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:layout_width="@dimen/context_dialog_width"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_container_shadow">
+
+    <Button
+        android:id="@+id/context_button_open"
+        style="@style/ContextMenuButton"
+        android:text="@string/open" />
+
+    <Button
+        android:visibility="gone"
+        android:id="@+id/context_button_copy"
+        style="@style/ContextMenuButton"
+        android:text="@string/copy" />
+
+    <Button
+        android:visibility="gone"
+        android:id="@+id/context_button_move"
+        style="@style/ContextMenuButton"
+        android:text="@string/move" />
+
+    <Button
+        android:id="@+id/context_button_rename"
+        style="@style/ContextMenuButton"
+        android:text="@string/rename" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider"/>
+
+    <Button
+        android:id="@+id/context_button_remove"
+        style="@style/ContextMenuButton"
+        android:text="@string/remove"
+        android:textColor="@color/context_button_text_color_red"/>
+
+</LinearLayout>
