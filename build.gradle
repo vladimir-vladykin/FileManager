@@ -21,7 +21,8 @@ ext {
             rxJava              : "1.1.0",
             rxAndroid           : "1.1.0",
             butterknife         : "7.0.1",
-            dialogs             : "0.8.4.2@aar"
+            dialogs             : "0.8.4.2@aar",
+            tinyDancer          : "0.0.9",
     ]
 }
 
@@ -42,6 +43,7 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        mavenCentral()
         maven { url 'https://dl.bintray.com/drummer-aidan/maven' }
         maven { url "https://jitpack.io" }
     }

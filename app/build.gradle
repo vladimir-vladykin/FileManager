@@ -60,6 +60,9 @@ dependencies {
     compile ("com.afollestad.material-dialogs:core:${libraries.dialogs}") {
         transitive = true
     }
+
+    // debug tools
+    debugCompile "com.github.brianPlummer:tinydancer:${libraries.tinyDancer}"
 }
 
 retrolambda {
