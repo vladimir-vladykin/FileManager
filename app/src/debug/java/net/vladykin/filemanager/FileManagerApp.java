@@ -11,7 +11,7 @@ import com.squareup.leakcanary.LeakCanary;
  *
  * @author Vladimir Vladykin.
  */
-public class FileManagerApp extends BaseFileManagerApp {
+public class FileManagerApp extends BaseApp {
 
     @Override
     public void onCreate() {

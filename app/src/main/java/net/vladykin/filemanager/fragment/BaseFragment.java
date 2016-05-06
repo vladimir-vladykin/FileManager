@@ -9,12 +9,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.vladykin.filemanager.MainActivity;
 import net.vladykin.filemanager.R;
 
-/**
- * Created by Владимир on 22.02.2015.
- */
-public abstract class BaseFragment extends Fragment implements MainActivity.OnBackPressedListener, MainActivity.ToolbarAnimationListener {
-    protected MainActivity mActivity;
+public abstract class BaseFragment extends Fragment
+        implements MainActivity.OnBackPressedListener {
 
+    protected MainActivity mActivity;
     private MaterialDialog mMessageDialog;
 
     @Override
@@ -22,7 +20,6 @@ public abstract class BaseFragment extends Fragment implements MainActivity.OnBa
         super.onAttach(activity);
         mActivity = (MainActivity) activity;
         mActivity.setOnBackPressedListener(this);
-        mActivity.setToolbarAnimationListener(this);
     }
 
     @Override
@@ -32,7 +29,7 @@ public abstract class BaseFragment extends Fragment implements MainActivity.OnBa
         // prepare message dialog
         mMessageDialog = new MaterialDialog.Builder(mActivity)
                 .positiveText(R.string.ok)
-                .positiveColor(R.color.primary)
+                .positiveColorRes(R.color.primary)
                 .build();
     }
 
@@ -60,14 +57,11 @@ public abstract class BaseFragment extends Fragment implements MainActivity.OnBa
                 .positiveText(R.string.ok)
                 .input(getString(hintId), prefillText, callback)
                 .contentColorRes(R.color.primary)
-                .positiveColor(R.color.primary)
+                .positiveColorRes(R.color.primary)
                 .build();
         dialog.show();
     }
 
     @Override
     public abstract boolean onBackPressed();
-
-    @Override
-    public abstract void onAnimationEnd();
 }

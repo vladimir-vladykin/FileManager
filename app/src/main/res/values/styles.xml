@@ -35,6 +35,6 @@
     </style>
 
     <!-- Progress Style -->
-    <style name="CircularProgressDrawableStyle" parent="Material.Drawable.CircularProgress"/>
+    <!--<style name="CircularProgressDrawableStyle" parent="Material.Drawable.CircularProgress"/>-->
 
 </resources>

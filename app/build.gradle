@@ -1,31 +1,31 @@
+int minSdk = hasProperty('minSdk') ? minSdk.toInteger() : versions.minSdk
+println "Actual minSdk = ${minSdk}"
+
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'hu.supercluster.paperwork'
 
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'me.tatarka:gradle-retrolambda:3.2.4'
-    }
-}
+//paperwork {
+//    set = [
+//            gitSha      : getSha(),
+//            buildTime   : buildTime("dd-MM-yyyy HH:00:00 z", "UTC"),
+//    ]
+//}
 
 android {
-    compileSdkVersion rootProject.compileSdkVersion
-    buildToolsVersion rootProject.buildToolsVersion
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
 
     defaultConfig {
         applicationId config.appId
-        minSdkVersion config.minSdkVersion
-        targetSdkVersion config.targetSdkVersion
+        minSdkVersion minSdk
+        targetSdkVersion versions.targetSdk
         versionCode rootProject.versionCode
         versionName rootProject.versionName
     }
 
     buildTypes {
-
         debug {
             applicationIdSuffix ".dev"
             versionNameSuffix "-dev"
@@ -37,34 +37,52 @@ android {
         }
     }
 
+    sourceSets {
+        // directory, which contains plain unit test
+        test.java.srcDir 'src/unitTest/java'
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    // adjust lint to fail early
+    lintOptions {
+        warningsAsErrors true
+        abortOnError true
+    }
 }
 
 dependencies {
-    compile "com.android.support:appcompat-v7:${libraries.supportLibrary}"
-    compile "com.android.support:recyclerview-v7:${libraries.supportLibrary}"
-    compile "com.android.support:cardview-v7:${libraries.supportLibrary}"
-    compile "com.android.support:design:${libraries.supportLibrary}"
+    compile libraries.appCompat
+    compile libraries.recyclerView
+    compile libraries.cardView
+    compile libraries.design
 
-    compile "io.reactivex:rxjava:${libraries.rxJava}"
-    compile "io.reactivex:rxandroid:${libraries.rxAndroid}"
+    compile libraries.rxJava
+    compile libraries.rxAndroid
 
-    compile "com.jakewharton:butterknife:${libraries.butterknife}"
+    compile libraries.dagger
+    apt libraries.daggerCompiler
 
-    compile "com.melnykov:floatingactionbutton:1.2.0"
+    compile libraries.butterknife
+
     compile "com.pnikosis:materialish-progress:1.5"
-    compile "com.github.rey5137:material:1.1.0"
-    compile ("com.afollestad.material-dialogs:core:${libraries.dialogs}") {
+    compile (libraries.dialogs) {
         transitive = true
     }
 
-    // debug tools
-    debugCompile "com.github.brianPlummer:tinydancer:${libraries.tinyDancer}"
-    debugCompile "com.facebook.stetho:stetho:${libraries.stetho}"
-    debugCompile "com.squareup.leakcanary:leakcanary-android:${libraries.leakcanary}"
+    debugCompile libraries.tinyDancer
+    debugCompile libraries.stetho
+    debugCompile libraries.leakCanary
+    compile libraries.paperwork
+
+    testCompile libraries.junit
+    testCompile libraries.robolectric
+    testCompile libraries.assertJ
+    testCompile libraries.equalsVerifier
+//    testCompile libraries.mockitoCore
 }
 
 retrolambda {

@@ -8,17 +8,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewPropertyAnimator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.vladykin.filemanager.R;
-import net.vladykin.filemanager.model.FileInfo;
-import net.vladykin.filemanager.util.ScreenUtils;
+import net.vladykin.filemanager.entity.FileItem;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -29,11 +26,9 @@ import java.util.Locale;
  */
 public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder> {
     private static final int ICONS_CACHE_SIZE = 2;
-    private static final int ITEM_ANIMATION_DURATION = 600;
-    private static final int ANIMATED_ITEM_COUNTS = 6;
 
     private Context mContext;
-    private ArrayList<FileInfo> mFilesInfo;
+    private List<FileItem> mFilesInfo;
 
     /**
      * Date formatter for show file updating time correctly.
@@ -46,31 +41,9 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder> {
      */
     private LruCache<Integer, Bitmap> mIconsCache;
 
-    /**
-     * For detect which item was animated last.
-     */
-    private int mLastAnimatedPosition = -1;
-
-    /**
-     * Needed for getItemCount() returns 0 instead of real count of files
-     * until we decide to show list animated.
-     */
-    private int mItemsCount = 0;
-
-    /**
-     * If true, mItemsCount will be 0 until showItems() have been called.
-     */
-    private boolean willEnterAnimation;
-
-    /**
-     * For notify client code that animation was finished.
-     */
-    private EnterAnimationListener mAnimationListener;
-
-    public FileAdapter(Context context, boolean willEnterAnimation) {
+    public FileAdapter(Context context) {
         mContext = context;
         mIconsCache = new LruCache<>(ICONS_CACHE_SIZE);
-        this.willEnterAnimation = willEnterAnimation;
     }
 
     @Override
@@ -82,52 +55,26 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder> {
 
     @Override
     public void onBindViewHolder(FileHolder holder, int position) {
-        //start enter animation
-        runEnterAnimation(holder.itemView, position);
-
-        FileInfo fileInfo = mFilesInfo.get(position);
-        holder.mFileNameView.setText(fileInfo.getName());
+        FileItem fileItem = mFilesInfo.get(position);
+        holder.mFileNameView.setText(fileItem.getName());
         //TODO format size using bytes, kilobytes etc.
-        holder.mFileSizeView.setText(String.valueOf(fileInfo.getSize()));
-        holder.mFileLastModifiedView.setText(mFormat.format(fileInfo.getLastModified()));
+        holder.mFileSizeView.setText(String.valueOf(fileItem.getSize()));
+        holder.mFileLastModifiedView.setText(mFormat.format(fileItem.getLastModified()));
 
-        Bitmap icon = getIconByType(fileInfo.getType());
+        Bitmap icon = getIconByType(fileItem.getType());
         holder.mImageView.setImageBitmap(icon);
     }
 
     @Override
     public int getItemCount() {
-        return mItemsCount;
+        return mFilesInfo.size();
     }
 
     public void notifyRemoved(int position) {
-        mItemsCount = mFilesInfo.size();
         notifyItemRemoved(position);
     }
 
-    public void setWillEnterAnimation(boolean willEnterAnimation) {
-        this.willEnterAnimation = willEnterAnimation;
-    }
-
-    private void runEnterAnimation(View view, int position) {
-        if (!willEnterAnimation) {
-            return;
-        }
-
-        if (position > mLastAnimatedPosition) {
-            mLastAnimatedPosition = position;
-            view.setTranslationY(ScreenUtils.getScreenHeight(mContext));
-            ViewPropertyAnimator animator = view.animate();
-
-            animator
-                    .translationY(0)
-                    .setInterpolator(new DecelerateInterpolator(3.f))
-                    .setDuration(ITEM_ANIMATION_DURATION)
-                    .start();
-        }
-    }
-
-    private Bitmap getIconByType(final FileInfo.Type type) {
+    private Bitmap getIconByType(final FileItem.Type type) {
         int iconId = 0;
         switch (type) {
             case DIRECTORY:
@@ -155,20 +102,12 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder> {
         return icon;
     }
 
-    public void setFilesInfo(ArrayList<FileInfo> filesInfo) {
+    public void setFilesInfo(List<FileItem> filesInfo) {
         mFilesInfo = filesInfo;
-
-        //if we will do enter animation, we won't show items immediately
-        if(willEnterAnimation) {
-            mItemsCount = 0;
-        } else {
-            mItemsCount = mFilesInfo.size();
-            mLastAnimatedPosition = mItemsCount;
-            notifyDataSetChanged();
-        }
+        notifyDataSetChanged();
     }
 
-    public FileInfo getFileInfo(int position) {
+    public FileItem getFileInfo(int position) {
         return mFilesInfo.get(position);
     }
 
@@ -185,18 +124,5 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder> {
             mFileSizeView = (TextView) itemView.findViewById(R.id.file_size);
             mFileLastModifiedView = (TextView) itemView.findViewById(R.id.file_last_modified);
         }
-    }
-
-    /**
-     * Sets to mItemsCount the real count of elements and call
-     * notifyDataSetChange(). First items will we showed with enter animation.
-     */
-    public void showItems() {
-        mItemsCount = mFilesInfo.size();
-        notifyDataSetChanged();
-    }
-
-    public interface EnterAnimationListener {
-        void onAnimationEnd();
     }
 }

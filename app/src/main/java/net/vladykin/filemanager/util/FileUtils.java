@@ -20,11 +20,11 @@ import java.util.List;
 public class FileUtils {
 
     public static File getRootDirectory() {
-        return Environment.getExternalStorageDirectory();
+        return /*new File("/")*/Environment.getExternalStorageDirectory();
     }
 
     public static boolean isRootDirectory(File directory) {
-        return Environment.getExternalStorageDirectory().equals(directory);
+        return getRootDirectory().equals(directory);
     }
 
     public static boolean openFile(Context context, File file) {
@@ -44,7 +44,7 @@ public class FileUtils {
 
         intent.setDataAndType(Uri.fromFile(file), mimeType);
 
-        //check does system have app for open this file
+        //check does system have app for onOpen this file
         PackageManager packageManager = context.getPackageManager();
         List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
         boolean hasApp = activities.size() > 0;

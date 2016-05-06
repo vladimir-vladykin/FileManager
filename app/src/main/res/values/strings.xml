@@ -32,4 +32,12 @@
     <string name="move">Переместить</string>
     <string name="rename">Переименовать</string>
     <string name="remove">Удалить</string>
+
+    <string-array name="file_dialog_actions">
+        <item>Открыть</item>
+        <item>Копировать</item>
+        <item>Переместить</item>
+        <item>Переименовать</item>
+        <item>Удалить</item>
+    </string-array>
 </resources>
