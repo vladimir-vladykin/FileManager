@@ -51,4 +51,6 @@ public interface FileListView {
     void showFileActionsUi(FileItem fileItem);
 
     void showRenameUi(FileItem fileItem);
+
+    void showCreateFileUi(boolean forDirectory);
 }

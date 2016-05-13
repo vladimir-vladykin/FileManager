@@ -16,4 +16,6 @@ public interface FileManager {
     Single<File> move(File from, File to);
     Single<File> rename(File file, String newFileName);
     Single<Void> remove(File file);
+    Single<File> createFile(File directory, String fileName);
+    Single<File> createDirectory(File parentDirectory, String directoryName);
 }

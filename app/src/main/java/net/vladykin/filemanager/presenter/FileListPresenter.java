@@ -14,6 +14,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import rx.Single;
 import rx.Subscription;
 
 /**
@@ -104,6 +105,33 @@ public final class FileListPresenter extends Presenter<FileListView>
                 );
 
         unsubcribeAfterUnbind(subscription);
+    }
+
+    public void createFile(String fileName, boolean shouldCreateDirectory) {
+        Single<File> creatingObservable = shouldCreateDirectory
+                ? fileManager.createDirectory(currentDirectory, fileName)
+                : fileManager.createFile(currentDirectory, fileName);
+
+        Subscription subscription = creatingObservable
+                .subscribe(
+                        createdFile -> {
+//                            items.add(new FileItem(createdFile));
+                            // we just reload data here
+                            loadData();
+                        },
+                        throwable ->
+                                view().showError("Cannot create file", throwable)
+                );
+
+        unsubcribeAfterUnbind(subscription);
+    }
+
+    public void onCreateFileClick() {
+        view().showCreateFileUi(false);
+    }
+
+    public void onCreateDirectoryClick() {
+        view().showCreateFileUi(true);
     }
 
     @Override /** @hide */

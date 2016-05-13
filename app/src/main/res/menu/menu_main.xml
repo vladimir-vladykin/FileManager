@@ -10,14 +10,13 @@
         <!--app:showAsAction="always"/>-->
 
     <item
-        android:id="@+id/action_new_folder"
-        android:title="@string/action_new_folder"
-        android:orderInCategory="100"
+        android:id="@+id/action_new_file"
+        android:title="@string/action_new_file"
         app:showAsAction="never"/>
 
     <item
-        android:id="@+id/action_new_file"
-        android:title="@string/action_new_file"
+        android:id="@+id/action_new_folder"
+        android:title="@string/action_new_folder"
         app:showAsAction="never"/>
 
     <item

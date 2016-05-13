@@ -6,6 +6,7 @@ import net.vladykin.filemanager.FileManagerApp;
 import net.vladykin.filemanager.R;
 
 import java.io.File;
+import java.io.IOException;
 
 import rx.Single;
 import rx.android.schedulers.AndroidSchedulers;
@@ -49,5 +50,50 @@ public final class LocalFileManager implements FileManager {
     public Single<Void> remove(File file) {
         Log.d("manager", "remove");
         return null;
+    }
+
+    @Override
+    public Single<File> createFile(File directory, String fileName) {
+        return Single.just(fileName)
+                .flatMap(s -> Single.just(
+                        createNewFileInternal(directory, fileName))
+                );
+    }
+
+    @Override
+    public Single<File> createDirectory(File parentDirectory, String directoryName) {
+        return Single.just(directoryName)
+                .flatMap(s -> Single.just(
+                        createNewDirectoryInternal(parentDirectory, directoryName)
+                ));
+    }
+
+    private File createNewFileInternal(File parentDirectory, String fileName) {
+        File newFile = new File(parentDirectory, fileName);
+        if (newFile.exists()) {
+            throw new IllegalStateException("File is already exists");
+        }
+        try {
+            boolean ignored = newFile.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(
+                    "Cannot create file with path " + newFile.getAbsolutePath(), e);
+        }
+
+        return newFile;
+    }
+
+    private File createNewDirectoryInternal(File parentDirectory, String directoryName) {
+        File newDirectory = new File(parentDirectory, directoryName);
+        if (newDirectory.exists()) {
+            throw new IllegalStateException("Directory is already exists");
+        }
+        boolean result = newDirectory.mkdirs();
+        if (!result) {
+            throw new RuntimeException(
+                    "Cannot create directory with path " + newDirectory.getAbsolutePath());
+        }
+
+        return newDirectory;
     }
 }

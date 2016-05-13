@@ -23,9 +23,8 @@ public final class FileActions {
                                                        @NonNull final FileActionsCallbacks callbacks) {
         return new MaterialDialog.Builder(context)
                 .items(R.array.file_dialog_actions)
-                .itemsCallback((dialog, itemView, which, text) -> {
-                    invokeNecessaryCallback(which, fileItem, callbacks);
-                });
+                .itemsCallback((dialog, itemView, which, text) ->
+                        invokeNecessaryCallback(which, fileItem, callbacks));
     }
 
     private static void invokeNecessaryCallback(int which, FileItem fileItem, FileActionsCallbacks callbacks) {

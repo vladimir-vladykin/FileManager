@@ -5,7 +5,7 @@ ext.versions = [
         compileSdk          : 23,
         buildTools          : '23.0.3',
 
-        supportLibrary      : "23.2.1",
+        supportLibrary      : "23.3.0",
         rxJava              : "1.1.1",
         rxAndroid           : "1.1.0",
         butterknife         : "7.0.1",

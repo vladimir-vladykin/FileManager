@@ -9,6 +9,9 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -51,6 +54,7 @@ public final class FileListFragment extends BaseFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         component().inject(this);
 
         adapter = new FileAdapter(mActivity);
@@ -102,6 +106,26 @@ public final class FileListFragment extends BaseFragment
     public void onDestroyView() {
         presenter.unbindView(this);
         super.onDestroyView();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        switch (itemId) {
+            case R.id.action_new_file:
+                presenter.onCreateFileClick();
+                return true;
+            case R.id.action_new_folder:
+                presenter.onCreateDirectoryClick();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -157,7 +181,7 @@ public final class FileListFragment extends BaseFragment
 
     @Override
     public void showFileActionsUi(FileItem fileItem) {
-        FileActions.prepareDialog(getContext(), fileItem, presenter)
+        FileActions.prepareDialog(getActivity(), fileItem, presenter)
                 .build()
                 .show();
     }
@@ -179,6 +203,17 @@ public final class FileListFragment extends BaseFragment
                 R.string.enter_new_name, oldFileName,
                 file.isDirectory() ? R.string.directory_name : R.string.file_name,
                 callback);
+    }
+
+    @Override
+    public void showCreateFileUi(boolean forDirectory) {
+        showInputDialog(
+                R.string.enter_file_name, "",
+                forDirectory ? R.string.directory_name : R.string.file_name,
+                (dialog, input) -> {
+                    presenter.createFile(input.toString(), forDirectory);
+                }
+        );
     }
 
     private void setupRecyclerView() {
