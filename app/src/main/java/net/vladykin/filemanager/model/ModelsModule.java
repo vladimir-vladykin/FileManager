@@ -17,4 +17,9 @@ public class ModelsModule {
     public FileModel provideFilesModel() {
         return new LocalFileModelImpl();
     }
+
+    @Provides @NonNull
+    public FilesSourcesModel provideFileSourcesModel() {
+        return new FileSourcesModelImpl();
+    }
 }

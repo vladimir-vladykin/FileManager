@@ -1,6 +1,7 @@
 package net.vladykin.filemanager.adapter;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.util.LruCache;
@@ -13,7 +14,9 @@ import android.widget.TextView;
 
 import net.vladykin.filemanager.R;
 import net.vladykin.filemanager.entity.FileItem;
+import net.vladykin.filemanager.util.FileSizeFormatter;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
@@ -57,17 +60,28 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder> {
     public void onBindViewHolder(FileHolder holder, int position) {
         FileItem fileItem = mFilesInfo.get(position);
         holder.mFileNameView.setText(fileItem.getName());
-        //TODO format size using bytes, kilobytes etc.
-        holder.mFileSizeView.setText(String.valueOf(fileItem.getSize()));
+        setSizeToHolder(holder.mFileSizeView, fileItem);
+//        holder.mFileSizeView.setText(FileSizeFormatter.format(fileItem.getSize()));
         holder.mFileLastModifiedView.setText(mFormat.format(fileItem.getLastModified()));
 
         Bitmap icon = getIconByType(fileItem.getType());
         holder.mImageView.setImageBitmap(icon);
     }
 
+    private void setSizeToHolder(TextView sizeTextView, FileItem fileItem) {
+        File file = fileItem.getFile();
+        if (file.isDirectory()) {
+            Resources res = sizeTextView.getResources();
+            final int filesCount = fileItem.getChildFilesCount();
+            sizeTextView.setText(res.getQuantityString(R.plurals.file_count, filesCount, filesCount));
+        } else {
+            sizeTextView.setText(FileSizeFormatter.format(fileItem.getSize()));
+        }
+    }
+
     @Override
     public int getItemCount() {
-        return mFilesInfo.size();
+        return mFilesInfo != null ? mFilesInfo.size() : 0;
     }
 
     public void notifyRemoved(int position) {

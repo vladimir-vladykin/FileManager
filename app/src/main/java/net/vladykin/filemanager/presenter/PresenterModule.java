@@ -3,6 +3,7 @@ package net.vladykin.filemanager.presenter;
 import android.support.annotation.NonNull;
 
 import net.vladykin.filemanager.model.FileModel;
+import net.vladykin.filemanager.model.FilesSourcesModel;
 import net.vladykin.filemanager.util.FileManager;
 
 import java.io.File;
@@ -24,4 +25,10 @@ public class PresenterModule {
                                                       @NonNull File rootDirectory) {
         return new FileListPresenter(fileModel, fileManager, rootDirectory);
     }
+
+    @Provides @NonNull
+    public FilesSourcesPresenter provideFilesSourcesPresenter(@NonNull FilesSourcesModel sourcesModel) {
+        return new FilesSourcesPresenter(sourcesModel);
+    }
+
 }

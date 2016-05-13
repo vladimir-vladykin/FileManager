@@ -40,4 +40,20 @@
         <item>Переименовать</item>
         <item>Удалить</item>
     </string-array>
+
+    <string-array name="file_size_units">
+        <item>б</item>
+        <item>кб</item>
+        <item>мб</item>
+        <item>гб</item>
+        <item>тб</item>
+        <item>пб</item>
+        <item>эб</item>
+    </string-array>
+
+    <plurals name="file_count">
+        <item quantity="zero">Нет файлов</item>
+        <item quantity="one">1 файл</item>
+        <item quantity="other">%d файлов</item>
+    </plurals>
 </resources>

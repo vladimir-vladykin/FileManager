@@ -1,6 +1,9 @@
 package net.vladykin.filemanager.fragment;
 
+import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,7 +16,6 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
-import net.vladykin.filemanager.FileManagerApp;
 import net.vladykin.filemanager.R;
 import net.vladykin.filemanager.adapter.FileAdapter;
 import net.vladykin.filemanager.entity.FileItem;
@@ -31,6 +33,8 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static net.vladykin.filemanager.util.Permissions.*;
+
 public final class FileListFragment extends BaseFragment
         implements OnFileItemClickListener.OnFileClickListener, FileListView {
 
@@ -47,7 +51,7 @@ public final class FileListFragment extends BaseFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FileManagerApp.component().inject(this);
+        component().inject(this);
 
         adapter = new FileAdapter(mActivity);
     }
@@ -64,7 +68,34 @@ public final class FileListFragment extends BaseFragment
         setupRecyclerView();
 
         presenter.bindView(this);
-        presenter.loadData();
+
+        Activity activity = getActivity();
+        if (isReadExternalStorageAllowed(activity)) {
+            presenter.loadData();
+        } else if (shouldShowStorageRationale(activity)) {
+            showEmptyView();
+
+            // todo text from resources
+            showMessageWithAction(
+                    "You need to allow app to read internal storage, if you want to use it",
+                    "Allow",
+                    () -> requestReadExternalStorage(this)
+
+            );
+        } else {
+            showEmptyView();
+            requestReadExternalStorage(this);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == READ_EXTERNAL_STORAGE_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // todo check is presenter is bound
+                presenter.loadData();
+            }
+        }
     }
 
     @Override

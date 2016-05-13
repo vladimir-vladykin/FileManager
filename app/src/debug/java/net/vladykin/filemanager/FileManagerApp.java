@@ -16,9 +16,9 @@ public class FileManagerApp extends BaseApp {
     @Override
     public void onCreate() {
         super.onCreate();
-        setupTinyDancer();
-        setupStetho();
-        setupLeakCanary();
+//        setupTinyDancer();
+//        setupStetho();
+//        setupLeakCanary();
     }
 
     private void setupTinyDancer() {

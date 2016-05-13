@@ -7,7 +7,7 @@ import android.view.WindowManager;
 
 /**
  * Created by Vladimir on 04.04.2015.
- *
+ * todo remove
  * Helper for work with screen sizes and density.
  */
 public class ScreenUtils {

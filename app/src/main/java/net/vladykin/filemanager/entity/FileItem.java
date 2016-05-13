@@ -15,6 +15,11 @@ public final class FileItem implements Serializable {
     private Type mType;
     private File mFile;
 
+    /**
+     * Exists only if mFile is directory.
+     */
+    private int mChildFilesCount;
+
     public FileItem(File file) {
         mFile = file;
         updateFileInfo();
@@ -23,16 +28,23 @@ public final class FileItem implements Serializable {
 
     public void updateFileInfo() {
         mName = mFile.getName();
-        //TODO maybe not correct
         mSize = mFile.length();
         mLastModified = mFile.lastModified();
 
         //TODO different kind of files
-        if(mFile.isDirectory()) {
+        boolean fileIsDirectory = mFile.isDirectory();
+        if(fileIsDirectory) {
             mType = Type.DIRECTORY;
         } else {
             //unknown file
             mType = Type.UNSPECIFIED;
+        }
+
+        if (fileIsDirectory) {
+            File[] listFiles = mFile.listFiles();
+            mChildFilesCount = listFiles != null ? listFiles.length : 0;
+        } else {
+            mChildFilesCount = 0;
         }
     }
 
@@ -58,6 +70,10 @@ public final class FileItem implements Serializable {
 
     public File getFile() {
         return mFile;
+    }
+
+    public int getChildFilesCount() {
+        return mChildFilesCount;
     }
 
     public enum Type {

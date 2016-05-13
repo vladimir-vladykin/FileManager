@@ -2,10 +2,15 @@ package net.vladykin.filemanager.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.vladykin.filemanager.ApplicationComponent;
+import net.vladykin.filemanager.FileManagerApp;
 import net.vladykin.filemanager.MainActivity;
 import net.vladykin.filemanager.R;
 
@@ -18,6 +23,7 @@ public abstract class BaseFragment extends Fragment
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        // todo change to onAttach(Context)
         mActivity = (MainActivity) activity;
         mActivity.setOnBackPressedListener(this);
     }
@@ -51,6 +57,19 @@ public abstract class BaseFragment extends Fragment
         mMessageDialog.show();
     }
 
+    protected void showMessageWithAction(CharSequence message,
+                                         CharSequence actionText,
+                                         Runnable action) {
+        View rootView = getView();
+        if (rootView == null) {
+            Log.e(getTag(), "Cannot show message, because fragment's root view is null");
+            return;
+        }
+        Snackbar.make(rootView, message, Snackbar.LENGTH_LONG)
+                .setAction(actionText, v -> action.run())
+                .show();
+    }
+
     protected void showInputDialog(int titleId, String prefillText, int hintId, MaterialDialog.InputCallback callback) {
         MaterialDialog dialog = new MaterialDialog.Builder(mActivity)
                 .title(titleId)
@@ -62,6 +81,12 @@ public abstract class BaseFragment extends Fragment
         dialog.show();
     }
 
+    protected ApplicationComponent component() {
+        return FileManagerApp.component();
+    }
+
     @Override
-    public abstract boolean onBackPressed();
+    public boolean onBackPressed() {
+        return false;
+    }
 }
