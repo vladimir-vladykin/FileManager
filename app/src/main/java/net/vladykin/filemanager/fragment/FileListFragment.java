@@ -26,6 +26,7 @@ import net.vladykin.filemanager.presenter.FileListPresenter;
 import net.vladykin.filemanager.util.FileActions;
 import net.vladykin.filemanager.util.FileUtils;
 import net.vladykin.filemanager.util.OnFileItemClickListener;
+import net.vladykin.filemanager.util.order.FileOrders;
 import net.vladykin.filemanager.view.FileListView;
 
 import java.io.File;
@@ -124,8 +125,17 @@ public final class FileListFragment extends BaseFragment
             case R.id.action_new_folder:
                 presenter.onCreateDirectoryClick();
                 return true;
+            case R.id.action_sort:
+                showOrderUi();
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showOrderUi() {
+        FileOrders.prepareDialog(getActivity(), presenter)
+                .build()
+                .show();
     }
 
     @Override
@@ -238,39 +248,6 @@ public final class FileListFragment extends BaseFragment
         emptyView.setVisibility(emptyViewVisible ? View.VISIBLE : View.GONE);
     }
 
-//    private void removeFile(final int position) {
-//        File file = mFilesInfo.get(position).getFile();
-//
-//        FileUtils.deleteFile(file, new FileUtils.CompleteListener() {
-//            @Override
-//            public void onComplete() {
-//                // update list
-//                mFilesInfo.onRemove(position);
-//                adapter.notifyRemoved(position);
-//            }
-//
-//            @Override
-//            public void onFailure() {
-//                Toast.makeText(
-//                        mActivity, R.string.file_cannot_delete, Toast.LENGTH_LONG
-//                ).show();
-//            }
-//        });
-//    }
-//
-//    private void renameFile(int position, String newName) {
-//        File file = mFilesInfo.get(position).getFile();
-//
-//        if (FileUtils.renameFile(file, newName)) {
-//            // update info about file
-////            FileItem newFileInfo = new FileItem(new File(newName));
-//            mFilesInfo.get(position).setName(newName);
-//            adapter.notifyItemChanged(position);
-//        } else {
-//            showMessage(R.string.error, R.string.file_cannot_rename);
-//        }
-//    }
-
     @Override
     public void onItemClick(View view, int position) {
         presenter.onFileClick(position);
@@ -279,56 +256,6 @@ public final class FileListFragment extends BaseFragment
     @Override
     public void onItemLongClick(View view, int position) {
         presenter.onFileLongClick(position);
-//        mContextDialog.bindToItem(position);
-//        mContextDialog.setContextItemClickListener(new FileContextDialogView.ContextItemClickListener() {
-//            @Override
-//            public void onOpenClick(int position) {
-//                mContextDialog.dismiss();
-//                File file = adapter.getFileInfo(position).getFile();
-//                openFile(file);
-//            }
-//
-//            @Override
-//            public void onCopyClick(int position) {
-//                mContextDialog.dismiss();
-//            }
-//
-//            @Override
-//            public void onMoveClick(int position) {
-//                mConte
-//
-//            @OverridextDialog.dismiss();
-//            }
-//            public void onRenameClick(final int position) {
-//                mContextDialog.dismiss();
-//                final File file = adapter.getFileInfo(position).getFile();
-//                final String oldFileName = adapter.getFileInfo(position).getName();
-//
-//                showInputDialog(
-//                        R.string.enter_new_name,
-//                        oldFileName,
-//                        file.isDirectory() ? R.string.directory_name : R.string.file_name,
-//                        new MaterialDialog.InputCallback() {
-//                            @Override
-//                            public void onInput(MaterialDialog materialDialog, CharSequence charSequence) {
-//                                String fileName = charSequence.toString();
-//
-//                                // if it is new file name
-//                                if (!fileName.equals(oldFileName)) {
-//                                    renameFile(position, fileName);
-//                                }
-//                            }
-//                });
-//            }
-//
-//            @Override
-//            public void onRemoveClick(int position) {
-//                mContextDialog.dismiss();
-//                removeFile(position);
-//
-//            }
-//        });
-//        mContextDialog.show();
     }
 
     @Override

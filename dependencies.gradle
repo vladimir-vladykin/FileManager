@@ -6,8 +6,8 @@ ext.versions = [
         buildTools          : '23.0.3',
 
         supportLibrary      : "23.3.0",
-        rxJava              : "1.1.1",
-        rxAndroid           : "1.1.0",
+        rxJava              : "1.1.5",
+        rxAndroid           : "1.2.0",
         butterknife         : "7.0.1",
         dialogs             : "0.8.5.6@aar",
         tinyDancer          : "0.0.9",

@@ -6,10 +6,13 @@ import net.vladykin.filemanager.entity.FileItem;
 import net.vladykin.filemanager.model.FileModel;
 import net.vladykin.filemanager.util.FileActionsCallbacks;
 import net.vladykin.filemanager.util.FileManager;
+import net.vladykin.filemanager.util.order.FileOrdersCallback;
 import net.vladykin.filemanager.view.FileListView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -17,13 +20,15 @@ import javax.inject.Inject;
 import rx.Single;
 import rx.Subscription;
 
+import static net.vladykin.filemanager.util.order.FileItemComparators.alphabet;
+
 /**
  * Presenter for view with file list.
  *
  * @author Vladimir Vladykin.
  */
 public final class FileListPresenter extends Presenter<FileListView>
-        implements FileActionsCallbacks {
+        implements FileActionsCallbacks, FileOrdersCallback {
 
     @NonNull private final FileModel model;
     @NonNull private final FileManager fileManager;
@@ -31,6 +36,8 @@ public final class FileListPresenter extends Presenter<FileListView>
 
     private List<FileItem> items;
     private File currentDirectory;
+
+    private Comparator<FileItem> comparator;
 
     @Inject
     public FileListPresenter(@NonNull FileModel model,
@@ -42,6 +49,7 @@ public final class FileListPresenter extends Presenter<FileListView>
 
         currentDirectory = rootDirectory;
         items = new ArrayList<>();
+        comparator = alphabet();
     }
 
     @Override
@@ -90,11 +98,9 @@ public final class FileListPresenter extends Presenter<FileListView>
     }
 
     public void renameFile(final FileItem oldFileItem, String newFileName) {
-        // todo probably blocking progress here
         Subscription subscription = fileManager.rename(oldFileItem.getFile(), newFileName)
                 .subscribe(
                         newFile -> {
-                            // todo maybe move to another thread via flatMap and obtain here prepared FileItem
                             FileItem newFileItem = new FileItem(newFile);
                             int indexOfOldFile = items.indexOf(oldFileItem);
                             items.set(indexOfOldFile, newFileItem);
@@ -132,6 +138,15 @@ public final class FileListPresenter extends Presenter<FileListView>
 
     public void onCreateDirectoryClick() {
         view().showCreateFileUi(true);
+    }
+
+    @Override
+    public void onOrderChosen(Comparator<FileItem> newComparator) {
+        if (comparator != newComparator) {
+            comparator = newComparator;
+            reorderItems();
+            view().showFileList(items);
+        }
     }
 
     @Override /** @hide */
@@ -186,6 +201,10 @@ public final class FileListPresenter extends Presenter<FileListView>
         loadData();
     }
 
+    private void reorderItems() {
+        Collections.sort(items, comparator);
+    }
+
     private void showViewLoading() {
         FileListView view = view();
         if (view != null) {
@@ -195,6 +214,7 @@ public final class FileListPresenter extends Presenter<FileListView>
 
     private void saveFilesAndSetToView(List<FileItem> files) {
         items = files;
+        reorderItems();
 
         FileListView view = view();
         if (view == null) {

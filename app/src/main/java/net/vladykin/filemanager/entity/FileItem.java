@@ -25,7 +25,6 @@ public final class FileItem implements Serializable {
         updateFileInfo();
     }
 
-
     public void updateFileInfo() {
         mName = mFile.getName();
         mSize = mFile.length();
@@ -74,6 +73,10 @@ public final class FileItem implements Serializable {
 
     public int getChildFilesCount() {
         return mChildFilesCount;
+    }
+
+    public boolean isDirectory() {
+        return mType == Type.DIRECTORY;
     }
 
     public enum Type {

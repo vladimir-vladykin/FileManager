@@ -6,7 +6,7 @@
     <string name="action_settings">Settings</string>
     <string name="action_new_folder">Новая папка</string>
     <string name="action_new_file">Новый файл</string>
-    <string name="action_sort">Сортировать</string>
+    <string name="action_sort">Упорядочить</string>
     <string name="action_insert">Вставить</string>
     <string name="action_update">Обновить</string>
 
@@ -25,6 +25,12 @@
     <string name="new_name">Новое имя</string>
     <string name="file_name">Имя файла</string>
     <string name="directory_name">Имя папки</string>
+
+    <!-- File order -->
+    <string-array name="file_orders">
+        <item>По алфавиту (а-я)</item>
+        <item>По размеру (от меньшего к большему)</item>
+    </string-array>
 
     <!-- Context dialog -->
     <string name="open">Открыть</string>
