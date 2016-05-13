@@ -84,10 +84,6 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder> {
         return mFilesInfo != null ? mFilesInfo.size() : 0;
     }
 
-    public void notifyRemoved(int position) {
-        notifyItemRemoved(position);
-    }
-
     private Bitmap getIconByType(final FileItem.Type type) {
         int iconId = 0;
         switch (type) {

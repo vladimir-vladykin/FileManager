@@ -1,7 +1,5 @@
 package net.vladykin.filemanager.util;
 
-import android.util.Log;
-
 import net.vladykin.filemanager.FileManagerApp;
 import net.vladykin.filemanager.R;
 
@@ -47,9 +45,14 @@ public final class LocalFileManager implements FileManager {
     }
 
     @Override
-    public Single<Void> remove(File file) {
-        Log.d("manager", "remove");
-        return null;
+    public Single<File> remove(File removingFile) {
+        return Single.just(removingFile)
+                .map(file ->  {
+                    deleteFile(file);
+                    return file;
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
@@ -95,5 +98,24 @@ public final class LocalFileManager implements FileManager {
         }
 
         return newDirectory;
+    }
+
+    private void deleteFile(File file) {
+        if (file.isDirectory()) {
+            File[] listFiles = file.listFiles();
+            if (listFiles == null) {
+                return;
+            }
+
+            for (File deletingFile : listFiles) {
+                deleteFile(deletingFile);
+            }
+        }
+
+        // if it is directory, it is already empty
+        boolean result = file.delete();
+        if (!result) {
+            throw new RuntimeException("Cannot delete file " + file.getAbsolutePath());
+        }
     }
 }

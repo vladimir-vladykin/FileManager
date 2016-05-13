@@ -156,7 +156,21 @@ public final class FileListPresenter extends Presenter<FileListView>
 
     @Override /** @hide */
     public void onRemove(FileItem fileItem) {
-//        fileManager.remove(file);
+        unsubcribeAfterUnbind(fileManager.remove(fileItem.getFile())
+                .subscribe(
+                        aVoid -> {
+                            final int previousItemPosition = items.indexOf(fileItem);
+                            if (previousItemPosition < 0) {
+                                return;
+                            }
+
+                            items.remove(previousItemPosition);
+                            view().removeItem(previousItemPosition);
+                        },
+                        throwable ->
+                                view().showError("Cannot delete file", throwable)
+                )
+        );
     }
 
     private boolean isRootDirectory(File directory) {

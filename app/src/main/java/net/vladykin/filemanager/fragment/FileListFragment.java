@@ -153,6 +153,11 @@ public final class FileListFragment extends BaseFragment
     }
 
     @Override
+    public void removeItem(int position) {
+        adapter.notifyItemRemoved(position);
+    }
+
+    @Override
     public void openFile(File file) {
         boolean isOpened = FileUtils.openFile(mActivity, file);
 

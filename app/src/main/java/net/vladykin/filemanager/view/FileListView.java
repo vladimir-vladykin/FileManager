@@ -24,6 +24,7 @@ public interface FileListView {
      * Methods for updated part of list.
      */
     void updateItem(int position);
+    void removeItem(int position);
 
     /**
      * Shows or hides back button.
