@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.annotation.Nullable;
 import android.webkit.MimeTypeMap;
 
 import java.io.File;
@@ -97,14 +98,20 @@ public class FileUtils {
         return newDirectory.mkdir();
     }
 
-    public static boolean renameFile(File file, String newName) {
+    @Nullable
+    public static File renameFile(File file, String newName) {
         File parentDirectory = file.getParentFile();
-        return file.renameTo(new File(parentDirectory, newName));
+        File newFile = new File(parentDirectory, newName);
+        boolean renamed = file.renameTo(newFile);
+        if (!renamed) {
+            return null;
+        }
+
+        return newFile;
     }
 
     public interface CompleteListener {
         void onComplete();
         void onFailure();
     }
-
 }

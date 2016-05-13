@@ -96,7 +96,7 @@ public final class FileListPresenter extends Presenter<FileListView>
                         newFile -> {
                             // todo maybe move to another thread via flatMap and obtain here prepared FileItem
                             FileItem newFileItem = new FileItem(newFile);
-                            int indexOfOldFile = items.indexOf(newFileItem);
+                            int indexOfOldFile = items.indexOf(oldFileItem);
                             items.set(indexOfOldFile, newFileItem);
                             view().updateItem(indexOfOldFile);
                         },

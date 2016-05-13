@@ -31,9 +31,10 @@ public final class LocalFileManager implements FileManager {
     public Single<File> rename(File file, final String newFileName) {
         return Single.just(file)
                 .flatMap(oldFile -> {
-                    if (FileUtils.renameFile(oldFile, newFileName)) {
+                    File renamedFile = FileUtils.renameFile(oldFile, newFileName);
+                    if (renamedFile != null) {
                         // return the same instance, but it already has another name
-                        return Single.just(oldFile);
+                        return Single.just(renamedFile);
                     }
 
                     String message = FileManagerApp.instance().getApplicationContext()
