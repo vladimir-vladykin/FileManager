@@ -14,9 +14,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import rx.Observable;
 import rx.Single;
 import rx.Subscription;
 
@@ -138,6 +140,20 @@ public final class FileListPresenter extends Presenter<FileListView>
 
     public void onCreateDirectoryClick() {
         view().showCreateFileUi(true);
+    }
+
+    private static final int SEARCH_DELAY = 50;
+
+    public void provideSearchObservable(@NonNull Observable<CharSequence> searchObservable) {
+        Subscription subscription = searchObservable
+                .debounce(SEARCH_DELAY, TimeUnit.MILLISECONDS)
+                .subscribe(
+                        searchKey -> {
+                            view().setSearchKey(searchKey);
+                        },
+                        throwable -> view().showError("Cannot perform search", throwable)
+                );
+        unsubcribeAfterUnbind(subscription);
     }
 
     @Override

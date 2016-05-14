@@ -46,6 +46,8 @@ public interface FileListView {
      */
     void showError(String message, Throwable error);
 
+    void setSearchKey(CharSequence searchKey);
+
     /**
      * Shows to user possible actions with file.
      */

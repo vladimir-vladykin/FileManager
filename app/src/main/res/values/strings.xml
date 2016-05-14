@@ -9,6 +9,7 @@
     <string name="action_sort">Упорядочить</string>
     <string name="action_insert">Вставить</string>
     <string name="action_update">Обновить</string>
+    <string name="action_search">Поиск</string>
 
     <!-- Texts -->
     <string name="error">Ошибка</string>

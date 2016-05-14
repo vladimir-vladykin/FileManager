@@ -8,6 +8,7 @@ ext.versions = [
         supportLibrary      : "23.3.0",
         rxJava              : "1.1.5",
         rxAndroid           : "1.2.0",
+        rxBinding           : "0.4.0",
         butterknife         : "7.0.1",
         dialogs             : "0.8.5.6@aar",
         tinyDancer          : "0.0.9",
@@ -31,6 +32,7 @@ ext.libraries = [
 
         rxJava              : "io.reactivex:rxjava:$versions.rxJava",
         rxAndroid           : "io.reactivex:rxandroid:$versions.rxAndroid",
+        rxBinding           : "com.jakewharton.rxbinding:rxbinding-appcompat-v7:$versions.rxBinding",
 
         // support library
         appCompat           : "$supportPackage:appcompat-v7:$versions.supportLibrary",

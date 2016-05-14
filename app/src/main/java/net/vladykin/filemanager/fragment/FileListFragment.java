@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
 import net.vladykin.filemanager.R;
@@ -37,7 +39,10 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-import static net.vladykin.filemanager.util.Permissions.*;
+import static net.vladykin.filemanager.util.Permissions.READ_EXTERNAL_STORAGE_CODE;
+import static net.vladykin.filemanager.util.Permissions.isReadExternalStorageAllowed;
+import static net.vladykin.filemanager.util.Permissions.requestReadExternalStorage;
+import static net.vladykin.filemanager.util.Permissions.shouldShowStorageRationale;
 
 public final class FileListFragment extends BaseFragment
         implements OnFileItemClickListener.OnFileClickListener, FileListView {
@@ -48,6 +53,7 @@ public final class FileListFragment extends BaseFragment
     @Bind(R.id.file_list_view) RecyclerView recyclerView;
     @Bind(R.id.file_list_progress_bar) ProgressWheel progressBar;
     @Bind(R.id.file_list_empty_text) TextView emptyView;
+    private SearchView searchView;
 
     @Inject FileListPresenter presenter;
     private FileAdapter adapter;
@@ -97,7 +103,7 @@ public final class FileListFragment extends BaseFragment
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == READ_EXTERNAL_STORAGE_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // todo check is presenter is bound
+                // todo check is presenter bound
                 presenter.loadData();
             }
         }
@@ -112,7 +118,20 @@ public final class FileListFragment extends BaseFragment
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_main, menu);
+        inflater.inflate(R.menu.menu_search, menu);
+        // todo obtain search view and create observable for listen changes
         super.onCreateOptionsMenu(menu, inflater);
+
+        searchView = null;
+        MenuItem searchMenuItem = menu.findItem(R.id.action_search);
+        if (searchMenuItem == null) {
+            return;
+        }
+
+        searchView = (SearchView) searchMenuItem.getActionView();
+
+        // todo check it, maybe we can loss observable after recreating view
+        presenter.provideSearchObservable(RxSearchView.queryTextChanges(searchView));
     }
 
     @Override
@@ -149,7 +168,7 @@ public final class FileListFragment extends BaseFragment
         adapter.setFilesInfo(files);
 
         // todo maybe not the best decision
-        recyclerView.scrollToPosition(0);
+        recyclerView.post(() -> recyclerView.scrollToPosition(0));
     }
 
     @Override
@@ -192,6 +211,11 @@ public final class FileListFragment extends BaseFragment
         // todo message from resources
         Snackbar.make(recyclerView, message, Snackbar.LENGTH_LONG)
                 .show();
+    }
+
+    @Override
+    public void setSearchKey(CharSequence searchKey) {
+        adapter.filter(searchKey);
     }
 
     @Override
