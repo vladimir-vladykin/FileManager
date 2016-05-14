@@ -14,6 +14,8 @@ public final class LastModifiedComparator implements Comparator<FileItem> {
 
     @Override
     public int compare(FileItem left, FileItem right) {
-        return (int) (left.getLastModified() - right.getLastModified());
+        long leftTime = left.getLastModified();
+        long rightTime = right.getLastModified();
+        return leftTime == rightTime ? 0 : leftTime < rightTime ? 1 : -1;
     }
 }
