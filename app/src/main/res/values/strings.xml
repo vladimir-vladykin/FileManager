@@ -30,7 +30,10 @@
     <!-- File order -->
     <string-array name="file_orders">
         <item>По алфавиту (а-я)</item>
+        <item>По алфавиту (я-а)</item>
         <item>По размеру (от меньшего к большему)</item>
+        <item>По размеру (от большего к меньшему)</item>
+        <item>По дате последнего изменения</item>
     </string-array>
 
     <!-- Context dialog -->

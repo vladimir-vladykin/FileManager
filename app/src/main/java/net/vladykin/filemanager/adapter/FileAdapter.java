@@ -56,8 +56,8 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder>
     public FileAdapter(Context context) {
         mContext = context;
         mIconsCache = new LruCache<>(ICONS_CACHE_SIZE);
-        itemsFilter = new ItemsFilter();
         mSortedFileInfo = new ArrayList<>();
+        itemsFilter = new ItemsFilter();
     }
 
     public void filter(CharSequence searchKey) {
