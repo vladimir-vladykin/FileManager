@@ -79,6 +79,33 @@ public final class FileItem implements Serializable {
         return mType == Type.DIRECTORY;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FileItem fileItem = (FileItem) o;
+
+        if (mSize != fileItem.mSize) return false;
+        if (mLastModified != fileItem.mLastModified) return false;
+        if (mChildFilesCount != fileItem.mChildFilesCount) return false;
+        if (mName != null ? !mName.equals(fileItem.mName) : fileItem.mName != null) return false;
+        if (mType != fileItem.mType) return false;
+        return mFile != null ? mFile.equals(fileItem.mFile) : fileItem.mFile == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = mName != null ? mName.hashCode() : 0;
+        result = 31 * result + (int) (mSize ^ (mSize >>> 32));
+        result = 31 * result + (int) (mLastModified ^ (mLastModified >>> 32));
+        result = 31 * result + (mType != null ? mType.hashCode() : 0);
+        result = 31 * result + (mFile != null ? mFile.hashCode() : 0);
+        result = 31 * result + mChildFilesCount;
+        return result;
+    }
+
     public enum Type {
         UNSPECIFIED, // unknown file
         DIRECTORY

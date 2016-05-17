@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -119,7 +120,6 @@ public final class FileListFragment extends BaseFragment
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_main, menu);
         inflater.inflate(R.menu.menu_search, menu);
-        // todo obtain search view and create observable for listen changes
         super.onCreateOptionsMenu(menu, inflater);
 
         searchView = null;
@@ -129,9 +129,14 @@ public final class FileListFragment extends BaseFragment
         }
 
         searchView = (SearchView) searchMenuItem.getActionView();
-
-        // todo check it, maybe we can loss observable after recreating view
-        presenter.provideSearchObservable(RxSearchView.queryTextChanges(searchView));
+        searchView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                searchView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                // todo check it, maybe we can loss observable after recreating view
+                presenter.provideSearchObservable(RxSearchView.queryTextChanges(searchView));
+            }
+        });
     }
 
     @Override
@@ -187,6 +192,11 @@ public final class FileListFragment extends BaseFragment
     }
 
     @Override
+    public void moveItem(int from, int to) {
+        adapter.notifyItemMoved(from, to);
+    }
+
+    @Override
     public void openFile(File file) {
         boolean isOpened = FileUtils.openFile(mActivity, file);
 
@@ -208,14 +218,10 @@ public final class FileListFragment extends BaseFragment
 
     @Override
     public void showError(String message, Throwable error) {
+        error.printStackTrace();
         // todo message from resources
         Snackbar.make(recyclerView, message, Snackbar.LENGTH_LONG)
                 .show();
-    }
-
-    @Override
-    public void setSearchKey(CharSequence searchKey) {
-        adapter.filter(searchKey);
     }
 
     @Override

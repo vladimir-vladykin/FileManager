@@ -6,12 +6,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.util.LruCache;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,7 +18,6 @@ import net.vladykin.filemanager.util.FileSizeFormatter;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -31,16 +27,11 @@ import java.util.Locale;
  * Adapter for list of files.
  * Takes care about enter animation, when necessary.
  */
-public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder>
-        implements Filterable {
+public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder> {
     private static final int ICONS_CACHE_SIZE = 2;
 
     private Context mContext;
-    private List<FileItem> mFilesInfo;
-    private List<FileItem> mSortedFileInfo;
-
-    private Filter itemsFilter;
-    private CharSequence searchKey;
+    private List<FileItem> items;
 
     /**
      * Date formatter for show file updating time correctly.
@@ -56,19 +47,6 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder>
     public FileAdapter(Context context) {
         mContext = context;
         mIconsCache = new LruCache<>(ICONS_CACHE_SIZE);
-        mSortedFileInfo = new ArrayList<>();
-        itemsFilter = new ItemsFilter();
-    }
-
-    public void filter(CharSequence searchKey) {
-        this.searchKey = searchKey;
-        performListFiltering();
-    }
-
-    @Override
-    public Filter getFilter() {
-        // todo maybe keep search key inside adapter, because we need to refilter new establishing list
-        return itemsFilter;
     }
 
     @Override
@@ -80,13 +58,18 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder>
 
     @Override
     public void onBindViewHolder(FileHolder holder, int position) {
-        FileItem fileItem = mSortedFileInfo.get(position);
+        FileItem fileItem = items.get(position);
         holder.mFileNameView.setText(fileItem.getName());
         setSizeToHolder(holder.mFileSizeView, fileItem);
         holder.mFileLastModifiedView.setText(mFormat.format(fileItem.getLastModified()));
 
         Bitmap icon = getIconByType(fileItem.getType());
         holder.mImageView.setImageBitmap(icon);
+    }
+
+    @Override
+    public int getItemCount() {
+        return items.size();
     }
 
     private void setSizeToHolder(TextView sizeTextView, FileItem fileItem) {
@@ -98,11 +81,6 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder>
         } else {
             sizeTextView.setText(FileSizeFormatter.format(fileItem.getSize()));
         }
-    }
-
-    @Override
-    public int getItemCount() {
-        return mSortedFileInfo.size();
     }
 
     private Bitmap getIconByType(final FileItem.Type type) {
@@ -134,22 +112,8 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder>
     }
 
     public void setFilesInfo(List<FileItem> filesInfo) {
-        mFilesInfo = filesInfo;
-        if (TextUtils.isEmpty(searchKey)) {
-            mSortedFileInfo.clear();
-            mSortedFileInfo.addAll(mFilesInfo);
-            notifyDataSetChanged();
-        } else {
-            performListFiltering();
-        }
-    }
-
-    public FileItem getFileInfo(int position) {
-        return mFilesInfo.get(position);
-    }
-
-    private void performListFiltering() {
-        getFilter().filter(searchKey);
+        items = filesInfo;
+        notifyDataSetChanged();
     }
 
     public static class FileHolder extends RecyclerView.ViewHolder {
@@ -164,43 +128,6 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder>
             mFileNameView = (TextView) itemView.findViewById(R.id.file_name);
             mFileSizeView = (TextView) itemView.findViewById(R.id.file_size);
             mFileLastModifiedView = (TextView) itemView.findViewById(R.id.file_last_modified);
-        }
-    }
-
-    // fixme filter code is bad; unefficient, unreadable
-    private final class ItemsFilter extends Filter {
-
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            // todo should we create new every time
-            FilterResults results = new FilterResults();
-            if (constraint == null || constraint.length() == 0) {
-                results.values = mFilesInfo;
-                results.count = mFilesInfo.size();
-            } else {
-                // fixme really? we need new every time
-                List<FileItem> buffer = new ArrayList<>();
-
-                String upperCasedConstraint = constraint.toString().toUpperCase();
-                for (FileItem fileItem : mFilesInfo) {
-                    if (fileItem.getName().toUpperCase()
-                            .startsWith(upperCasedConstraint)) {
-                        buffer.add(fileItem);
-                    }
-                }
-
-                results.values = buffer;
-                results.count = buffer.size();
-            }
-
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            mSortedFileInfo.clear();
-            mSortedFileInfo.addAll((List<FileItem>) results.values);
-            notifyDataSetChanged();
         }
     }
 }

@@ -21,10 +21,11 @@ public interface FileListView {
     void showEmptyView();
 
     /**
-     * Methods for updated part of list.
+     * Methods for update part of list.
      */
     void updateItem(int position);
     void removeItem(int position);
+    void moveItem(int from, int to);
 
     /**
      * Shows or hides back button.
@@ -45,8 +46,6 @@ public interface FileListView {
      * Should show short time error message.
      */
     void showError(String message, Throwable error);
-
-    void setSearchKey(CharSequence searchKey);
 
     /**
      * Shows to user possible actions with file.
