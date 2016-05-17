@@ -48,9 +48,6 @@ import static net.vladykin.filemanager.util.Permissions.shouldShowStorageRationa
 public final class FileListFragment extends BaseFragment
         implements OnFileItemClickListener.OnFileClickListener, FileListView {
 
-    private static final String FILES_KEY = "files_key";
-    private static final String DIRECTORY_KEY = "directory_key";
-
     @Bind(R.id.file_list_view) RecyclerView recyclerView;
     @Bind(R.id.file_list_progress_bar) ProgressWheel progressBar;
     @Bind(R.id.file_list_empty_text) TextView emptyView;
@@ -66,6 +63,7 @@ public final class FileListFragment extends BaseFragment
         component().inject(this);
 
         adapter = new FileAdapter(mActivity);
+        presenter.restoreState(savedInstanceState);
     }
 
     @Override
@@ -295,10 +293,7 @@ public final class FileListFragment extends BaseFragment
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        // todo save presenter state
+        presenter.saveState(outState);
         super.onSaveInstanceState(outState);
-        //TODO mFileInfo can be empty while loading
-//        outState.putSerializable(FILES_KEY, mFilesInfo);
-//        outState.putSerializable(DIRECTORY_KEY, mCurrentDirectory);
     }
 }

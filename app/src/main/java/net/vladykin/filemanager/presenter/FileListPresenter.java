@@ -1,6 +1,8 @@
 package net.vladykin.filemanager.presenter;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import net.vladykin.filemanager.entity.FileItem;
@@ -36,6 +38,7 @@ public final class FileListPresenter extends Presenter<FileListView>
         implements FileActionsCallbacks, FileOrdersCallback {
 
     private static final int SEARCH_DELAY = 50;
+    private static final String CURRENT_DIRECTORY_KEY = "file_key";
 
     @NonNull private final FileModel model;
     @NonNull private final FileManager fileManager;
@@ -68,8 +71,7 @@ public final class FileListPresenter extends Presenter<FileListView>
     public void bindView(@NonNull FileListView view) {
         super.bindView(view);
 
-        // initially we don't need back button
-        setViewBackButtonVisible(false);
+        setViewBackButtonVisible(currentDirectory != rootDirectory);
     }
 
     public void loadData() {
@@ -84,6 +86,17 @@ public final class FileListPresenter extends Presenter<FileListView>
                 );
 
         unsubcribeAfterUnbind(subscription);
+    }
+
+    public void saveState(Bundle outState) {
+        // todo current search key and comparator coulb be saved too
+        outState.putSerializable(CURRENT_DIRECTORY_KEY, currentDirectory);
+    }
+
+    public void restoreState(@Nullable Bundle savedState) {
+        if (savedState != null) {
+            currentDirectory = (File) savedState.getSerializable(CURRENT_DIRECTORY_KEY);
+        }
     }
 
     public void onFileClick(int position) {
