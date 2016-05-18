@@ -2,6 +2,8 @@ package net.vladykin.filemanager.model;
 
 import android.support.annotation.NonNull;
 
+import net.vladykin.filemanager.util.file.FilesSource;
+
 import dagger.Module;
 import dagger.Provides;
 
@@ -14,8 +16,8 @@ import dagger.Provides;
 public class ModelsModule {
 
     @Provides @NonNull
-    public FileModel provideFilesModel() {
-        return new LocalFileModelImpl();
+    public FileModel provideFilesModel(FilesSource root) {
+        return new LocalFileModel(root);
     }
 
     @Provides @NonNull

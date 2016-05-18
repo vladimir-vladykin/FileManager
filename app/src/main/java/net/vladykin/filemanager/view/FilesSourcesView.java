@@ -1,6 +1,6 @@
 package net.vladykin.filemanager.view;
 
-import net.vladykin.filemanager.entity.FileSource;
+import net.vladykin.filemanager.entity.FileSourceItem;
 
 import java.util.List;
 
@@ -11,6 +11,6 @@ import java.util.List;
  */
 public interface FilesSourcesView {
 
-    void setFilesSources(List<FileSource> sources);
-    void showFilesHierarchy(FileSource source);
+    void setFilesSources(List<FileSourceItem> sources);
+    void showFilesHierarchy(FileSourceItem source);
 }

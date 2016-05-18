@@ -8,16 +8,16 @@ import java.io.File;
 /**
  * Entity for represent source,
  * from which we can load list of files.
- *
+ * todo update this for keep FileSource
  * @author Vladimir Vladykin
  */
-public final class FileSource {
+public final class FileSourceItem {
 
     private final String title;
     private final File rootFile;
     @Nullable private final Uri iconUri;
 
-    public FileSource(String title, File rootFile, @Nullable Uri iconUri) {
+    public FileSourceItem(String title, File rootFile, @Nullable Uri iconUri) {
         this.title = title;
         this.rootFile = rootFile;
         this.iconUri = iconUri;

@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import net.vladykin.filemanager.entity.FileSource;
+import net.vladykin.filemanager.entity.FileSourceItem;
 import net.vladykin.filemanager.presenter.FilesSourcesPresenter;
 import net.vladykin.filemanager.view.FilesSourcesView;
 
@@ -52,12 +52,12 @@ public final class FilesSourcesFragment extends BaseFragment implements FilesSou
     }
 
     @Override
-    public void setFilesSources(List<FileSource> sources) {
+    public void setFilesSources(List<FileSourceItem> sources) {
         // todo show files list
     }
 
     @Override
-    public void showFilesHierarchy(FileSource source) {
+    public void showFilesHierarchy(FileSourceItem source) {
         // todo start FileListFragment
     }
 }

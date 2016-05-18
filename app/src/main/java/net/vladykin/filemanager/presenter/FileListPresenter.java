@@ -9,6 +9,7 @@ import net.vladykin.filemanager.entity.FileItem;
 import net.vladykin.filemanager.model.FileModel;
 import net.vladykin.filemanager.util.FileActionsCallbacks;
 import net.vladykin.filemanager.util.FileManager;
+import net.vladykin.filemanager.util.file.FilesSource;
 import net.vladykin.filemanager.util.order.FileOrdersCallback;
 import net.vladykin.filemanager.view.FileListView;
 
@@ -42,10 +43,11 @@ public final class FileListPresenter extends Presenter<FileListView>
 
     @NonNull private final FileModel model;
     @NonNull private final FileManager fileManager;
-    @NonNull private final File rootDirectory;
+    @NonNull private final FilesSource root;
+//    @NonNull private final File rootDirectory;
 
-    private List<FileItem> originalItems;
-    private List<FileItem> filteredItems;
+    private final List<FileItem> originalItems;
+    private final List<FileItem> filteredItems;
     private File currentDirectory;
 
     private Comparator<FileItem> comparator;
@@ -56,12 +58,13 @@ public final class FileListPresenter extends Presenter<FileListView>
     @Inject
     public FileListPresenter(@NonNull FileModel model,
                              @NonNull FileManager fileManager,
-                             @NonNull File rootDirectory) {
+                             @NonNull FilesSource root) {
         this.model = model;
         this.fileManager = fileManager;
-        this.rootDirectory = rootDirectory;
+        this.root = root;
+//        this.rootDirectory = rootDirectory;
 
-        currentDirectory = rootDirectory;
+        currentDirectory = root.getRootDirectory();
         originalItems = new ArrayList<>();
         filteredItems = new ArrayList<>();
         comparator = alphabet();
@@ -71,14 +74,14 @@ public final class FileListPresenter extends Presenter<FileListView>
     public void bindView(@NonNull FileListView view) {
         super.bindView(view);
 
-        setViewBackButtonVisible(currentDirectory != rootDirectory);
+        setViewBackButtonVisible(!root.isRootDirectory(currentDirectory) /*currentDirectory != rootDirectory*/);
     }
 
     public void loadData() {
         showViewLoading();
 
         Subscription subscription = model
-                .getFiles(currentDirectory)
+                .getFiles(/*currentDirectory*/)
                 .subscribe(
                         this::saveFilesAndSetToView,
                         throwable ->
@@ -89,13 +92,14 @@ public final class FileListPresenter extends Presenter<FileListView>
     }
 
     public void saveState(Bundle outState) {
-        // todo current search key and comparator coulb be saved too
+        // todo current search key and comparator could be saved too
         outState.putSerializable(CURRENT_DIRECTORY_KEY, currentDirectory);
     }
 
     public void restoreState(@Nullable Bundle savedState) {
         if (savedState != null) {
             currentDirectory = (File) savedState.getSerializable(CURRENT_DIRECTORY_KEY);
+            root.setCurrentDirectory(currentDirectory);
         }
     }
 
@@ -272,11 +276,12 @@ public final class FileListPresenter extends Presenter<FileListView>
     }
 
     private boolean isRootDirectory(File directory) {
-        return rootDirectory.equals(directory);
+        return root.isRootDirectory(directory) /*rootDirectory.equals(directory)*/;
     }
 
     private void openDirectory(File directory) {
         currentDirectory = directory;
+        root.setCurrentDirectory(currentDirectory);
 
         boolean shouldShowBackButton = !isRootDirectory(currentDirectory);
         setViewBackButtonVisible(shouldShowBackButton);
@@ -313,7 +318,8 @@ public final class FileListPresenter extends Presenter<FileListView>
     }
 
     private void saveFilesAndSetToView(List<FileItem> files) {
-        originalItems = files;
+        originalItems.clear();
+        originalItems.addAll(files);
 
         if (originalItems.size() > 0) {
             filterItems();

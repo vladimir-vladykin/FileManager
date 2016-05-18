@@ -32,7 +32,8 @@ public class BaseApp extends Application {
     }
 
     protected DaggerApplicationComponent.Builder prepareApplicationComponent() {
-        return DaggerApplicationComponent.builder();
+        return DaggerApplicationComponent.builder()
+                .applicationModule(new ApplicationModule(this));
     }
 
 }

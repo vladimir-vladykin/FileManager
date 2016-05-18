@@ -2,7 +2,7 @@ package net.vladykin.filemanager.presenter;
 
 import android.support.annotation.NonNull;
 
-import net.vladykin.filemanager.entity.FileSource;
+import net.vladykin.filemanager.entity.FileSourceItem;
 import net.vladykin.filemanager.model.FilesSourcesModel;
 import net.vladykin.filemanager.view.FilesSourcesView;
 
@@ -19,7 +19,7 @@ public final class FilesSourcesPresenter extends Presenter<FilesSourcesView> {
 
     @NonNull
     private final FilesSourcesModel model;
-    private final List<FileSource> sources;
+    private final List<FileSourceItem> sources;
 
     public FilesSourcesPresenter(@NonNull FilesSourcesModel model) {
         this.model = model;

@@ -2,7 +2,7 @@ package net.vladykin.filemanager.model;
 
 import android.support.annotation.NonNull;
 
-import net.vladykin.filemanager.entity.FileSource;
+import net.vladykin.filemanager.entity.FileSourceItem;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public final class FileSourcesModelImpl implements FilesSourcesModel {
 
     @NonNull
     @Override
-    public Single<List<FileSource>> prepareFilesSources() {
+    public Single<List<FileSourceItem>> prepareFilesSources() {
         return null;
     }
 }

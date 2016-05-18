@@ -2,7 +2,6 @@ package net.vladykin.filemanager.model;
 
 import net.vladykin.filemanager.entity.FileItem;
 
-import java.io.File;
 import java.util.List;
 
 import rx.Single;
@@ -14,5 +13,5 @@ import rx.Single;
  */
 public interface FileModel {
 
-    Single<List<FileItem>> getFiles(File directory);
+    Single<List<FileItem>> getFiles();
 }
