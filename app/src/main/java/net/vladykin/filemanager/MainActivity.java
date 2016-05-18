@@ -9,7 +9,6 @@ import net.vladykin.filemanager.navigation.MainRouter;
 
 
 public class MainActivity extends AppCompatActivity {
-    private static final String LIST_FRAGMENT_TAG = "list_fragment_tag";
 
     private Toolbar mToolbar;
     private OnBackPressedListener mBackPressedListener;
@@ -27,10 +26,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             router.onAppStarted();
-//            FileSourcesFragment fragment = new FileSourcesFragment();
-//            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//            transaction.replace(R.id.container, fragment, LIST_FRAGMENT_TAG);
-//            transaction.commit();
         }
     }
 

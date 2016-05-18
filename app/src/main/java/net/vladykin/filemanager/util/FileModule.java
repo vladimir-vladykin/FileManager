@@ -1,12 +1,13 @@
 package net.vladykin.filemanager.util;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 
+import net.vladykin.filemanager.PresenterScope;
 import net.vladykin.filemanager.util.file.FilesSource;
-import net.vladykin.filemanager.util.file.VideosSource;
 
-import javax.inject.Singleton;
+import java.io.File;
+
+import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
@@ -20,25 +21,35 @@ import dagger.Provides;
 @Module
 public class FileModule {
 
-    @Provides @NonNull @Singleton
-    public FilesSource provideFilesRoot(@NonNull Context context/*, @NonNull File rootDirectory*/) {
-        return new VideosSource(context, "");
+    public static final String STORAGE = "storage";
+    public static final String ROOT = "root";
 
-        // todo real title
-//        return new FileSystemSource(rootDirectory, "");
+    private FilesSource source;
+
+    public FileModule() {
+        // use this constructor, if you don't need to use FilesSource
     }
 
-//    @Provides @NonNull @Singleton
-//    public File provideStorageDirectory() {
-//        return FileUtils.getRootDirectory();
-//    }
-//
-//    @Provides @NonNull @Singleton
-//    public File provideRootDirectory() {
-//        return Environment.getRootDirectory();
-//    }
+    public FileModule(FilesSource source) {
+        this.source = source;
+    }
 
-    @Provides @NonNull @Singleton
+    @Provides @NonNull @PresenterScope
+    public FilesSource provideFilesSource() {
+        return source;
+    }
+
+    @Provides @Named(STORAGE) @NonNull @PresenterScope
+    public File provideStorageDirectory() {
+        return FileUtils.getStorageDirectory();
+    }
+
+    @Provides @Named(ROOT) @NonNull @PresenterScope
+    public File provideRootDirectory() {
+        return FileUtils.getRootDirectory();
+    }
+
+    @Provides @NonNull @PresenterScope
     public FileManager provideFileManager() {
         return new LocalFileManager();
     }

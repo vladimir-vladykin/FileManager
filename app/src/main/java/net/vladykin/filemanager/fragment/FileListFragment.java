@@ -27,6 +27,7 @@ import net.vladykin.filemanager.adapter.FileAdapter;
 import net.vladykin.filemanager.entity.FileItem;
 import net.vladykin.filemanager.presenter.FileListPresenter;
 import net.vladykin.filemanager.util.FileActions;
+import net.vladykin.filemanager.util.FileModule;
 import net.vladykin.filemanager.util.FileUtils;
 import net.vladykin.filemanager.util.OnFileItemClickListener;
 import net.vladykin.filemanager.util.file.FilesSource;
@@ -71,7 +72,10 @@ public final class FileListFragment extends BaseFragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        component().inject(this);
+        FilesSource source = (FilesSource) getArguments().getSerializable(SOURCE);
+        appComponent()
+                .addPresenterSubComponent(new FileModule(source))
+                .inject(this);
 
         adapter = new FileAdapter(mActivity);
         presenter.restoreState(savedInstanceState);

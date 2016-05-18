@@ -12,6 +12,7 @@ import net.vladykin.filemanager.R;
 import net.vladykin.filemanager.adapter.FileSourcesAdapter;
 import net.vladykin.filemanager.entity.FileSourceItem;
 import net.vladykin.filemanager.presenter.FilesSourcesPresenter;
+import net.vladykin.filemanager.util.FileModule;
 import net.vladykin.filemanager.view.FilesSourcesView;
 
 import java.util.List;
@@ -38,7 +39,10 @@ public final class FileSourcesFragment extends BaseFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        component().inject(this);
+        appComponent()
+                .addPresenterSubComponent(new FileModule())
+                .inject(this);
+
         adapter = new FileSourcesAdapter();
         adapter.setClickListener(this);
     }

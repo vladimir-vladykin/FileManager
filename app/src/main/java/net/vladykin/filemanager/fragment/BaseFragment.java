@@ -93,7 +93,7 @@ public abstract class BaseFragment extends Fragment
         dialog.show();
     }
 
-    protected ApplicationComponent component() {
+    protected ApplicationComponent appComponent() {
         return FileManagerApp.component();
     }
 

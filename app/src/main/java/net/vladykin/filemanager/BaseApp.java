@@ -38,8 +38,8 @@ public class BaseApp extends Application {
 
     protected DaggerApplicationComponent.Builder prepareApplicationComponent() {
         return DaggerApplicationComponent.builder()
-                .applicationModule(new ApplicationModule(this))
-                .modelsModule(new ModelsModule(getStorageDirectory(), getRootDirectory()));
+                .applicationModule(new ApplicationModule(this));
+//                .modelsModule(new ModelsModule(getStorageDirectory(), getRootDirectory()));
     }
 
 }
