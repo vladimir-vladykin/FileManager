@@ -16,6 +16,7 @@ ext.versions = [
         leakcanary          : "1.3.1",
         paperwork           : "1.2.4",
         dagger              : "2.4",
+        glide               : "3.7.0",
 
         junit                  : '4.12',
         robolectric            : '3.0',
@@ -43,6 +44,7 @@ ext.libraries = [
         // ui libs
         dialogs             : "com.afollestad.material-dialogs:core:$versions.dialogs",
         butterknife         : "com.jakewharton:butterknife:$versions.butterknife",
+        glide               : "com.github.bumptech.glide:glide:$versions.glide",
 
         // debug tools
         tinyDancer          : "com.github.brianPlummer:tinydancer:$versions.tinyDancer",

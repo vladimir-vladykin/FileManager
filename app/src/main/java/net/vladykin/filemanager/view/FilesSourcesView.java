@@ -12,5 +12,5 @@ import java.util.List;
 public interface FilesSourcesView {
 
     void setFilesSources(List<FileSourceItem> sources);
-    void showFilesHierarchy(FileSourceItem source);
+    void displayFilesHierarchy(FileSourceItem source);
 }

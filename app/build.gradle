@@ -68,6 +68,7 @@ dependencies {
     apt libraries.daggerCompiler
 
     compile libraries.butterknife
+    compile libraries.glide
 
     compile "com.pnikosis:materialish-progress:1.5"
     compile (libraries.dialogs) {

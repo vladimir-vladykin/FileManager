@@ -1,6 +1,6 @@
 package net.vladykin.filemanager.fragment;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -13,6 +13,7 @@ import net.vladykin.filemanager.ApplicationComponent;
 import net.vladykin.filemanager.FileManagerApp;
 import net.vladykin.filemanager.MainActivity;
 import net.vladykin.filemanager.R;
+import net.vladykin.filemanager.navigation.MainRouter;
 
 public abstract class BaseFragment extends Fragment
         implements MainActivity.OnBackPressedListener {
@@ -20,11 +21,18 @@ public abstract class BaseFragment extends Fragment
     protected MainActivity mActivity;
     private MaterialDialog mMessageDialog;
 
+//    @Override
+//    public void onAttach(Activity activity) {
+//        super.onAttach(activity);
+//        // todo change to onAttach(Context)
+//
+//    }
+
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        // todo change to onAttach(Context)
-        mActivity = (MainActivity) activity;
+    public void onAttach(Context context) {
+        // todo test it on low sdk devices
+        super.onAttach(context);
+        mActivity = (MainActivity) getActivity();
         mActivity.setOnBackPressedListener(this);
     }
 
@@ -37,6 +45,10 @@ public abstract class BaseFragment extends Fragment
                 .positiveText(R.string.ok)
                 .positiveColorRes(R.color.primary)
                 .build();
+    }
+
+    protected MainRouter getRouter() {
+        return mActivity.getRouter();
     }
 
     protected void showBackButton() {

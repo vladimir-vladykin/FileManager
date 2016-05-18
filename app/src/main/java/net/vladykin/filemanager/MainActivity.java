@@ -1,12 +1,11 @@
 package net.vladykin.filemanager;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import net.vladykin.filemanager.fragment.FileListFragment;
+import net.vladykin.filemanager.navigation.MainRouter;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -14,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private OnBackPressedListener mBackPressedListener;
+    private MainRouter router;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,22 +23,16 @@ public class MainActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
+        router = new MainRouter(getSupportFragmentManager(), R.id.container);
+
         if (savedInstanceState == null) {
-            FileListFragment fragment = new FileListFragment();
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.container, fragment, LIST_FRAGMENT_TAG);
-            transaction.commit();
+            router.onAppStarted();
+//            FileSourcesFragment fragment = new FileSourcesFragment();
+//            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//            transaction.replace(R.id.container, fragment, LIST_FRAGMENT_TAG);
+//            transaction.commit();
         }
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-////        getMenuInflater().inflate(R.menu.menu_main, menu);
-//
-//        return true;
-//    }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -54,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
         return mToolbar;
     }
 
+    public MainRouter getRouter() {
+        return router;
+    }
+
     @Override
     public void onBackPressed() {
         if (mBackPressedListener != null) {
@@ -64,7 +62,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        super.onBackPressed();
+        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            super.onBackPressed();
+            return;
+        }
+
+        // the last fragment, so finish activity
+        finish();
     }
 
     public void setOnBackPressedListener(OnBackPressedListener listener) {

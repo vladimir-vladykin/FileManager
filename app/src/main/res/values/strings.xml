@@ -3,7 +3,6 @@
     <string name="app_name">FileManager</string>
 
     <!-- Actions -->
-    <string name="action_settings">Settings</string>
     <string name="action_new_folder">Новая папка</string>
     <string name="action_new_file">Новый файл</string>
     <string name="action_sort">Упорядочить</string>
@@ -66,4 +65,12 @@
         <item quantity="one">1 файл</item>
         <item quantity="other">%d файлов</item>
     </plurals>
+
+    <!-- File source screen -->
+    <string name="file.source.title">Категории</string>
+    <string name="file.source.images.title">Изображения</string>
+    <string name="file.source.audio.title">Аудио</string>
+    <string name="file.source.video.title">Видео</string>
+    <string name="file.source.storage.title">Локальное хранилище</string>
+    <string name="file.source.root.title">Корневая папка (для опытных пользователей)</string>
 </resources>

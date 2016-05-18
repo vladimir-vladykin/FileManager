@@ -20,8 +20,12 @@ import java.util.List;
  */
 public class FileUtils {
 
+
+    public static File getStorageDirectory() {
+        return Environment.getExternalStorageDirectory();
+    }
     public static File getRootDirectory() {
-        return /*new File("/")*/Environment.getExternalStorageDirectory();
+        return Environment.getRootDirectory();
     }
 
     public static boolean isRootDirectory(File directory) {

@@ -29,6 +29,7 @@ import net.vladykin.filemanager.presenter.FileListPresenter;
 import net.vladykin.filemanager.util.FileActions;
 import net.vladykin.filemanager.util.FileUtils;
 import net.vladykin.filemanager.util.OnFileItemClickListener;
+import net.vladykin.filemanager.util.file.FilesSource;
 import net.vladykin.filemanager.util.order.FileOrders;
 import net.vladykin.filemanager.view.FileListView;
 
@@ -48,6 +49,8 @@ import static net.vladykin.filemanager.util.Permissions.shouldShowStorageRationa
 public final class FileListFragment extends BaseFragment
         implements OnFileItemClickListener.OnFileClickListener, FileListView {
 
+    private static final String SOURCE = "source";
+
     @Bind(R.id.file_list_view) RecyclerView recyclerView;
     @Bind(R.id.file_list_progress_bar) ProgressWheel progressBar;
     @Bind(R.id.file_list_empty_text) TextView emptyView;
@@ -55,6 +58,14 @@ public final class FileListFragment extends BaseFragment
 
     @Inject FileListPresenter presenter;
     private FileAdapter adapter;
+
+    public static FileListFragment newInstance(FilesSource source) {
+        Bundle args = new Bundle();
+        args.putSerializable(SOURCE, source);
+        FileListFragment fragment = new FileListFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

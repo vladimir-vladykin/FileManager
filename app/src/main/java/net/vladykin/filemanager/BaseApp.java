@@ -3,6 +3,11 @@ package net.vladykin.filemanager;
 import android.app.Application;
 import android.support.annotation.NonNull;
 
+import net.vladykin.filemanager.model.ModelsModule;
+
+import static net.vladykin.filemanager.util.FileUtils.getRootDirectory;
+import static net.vladykin.filemanager.util.FileUtils.getStorageDirectory;
+
 /**
  * Base class for custom application classes.
  *
@@ -33,7 +38,8 @@ public class BaseApp extends Application {
 
     protected DaggerApplicationComponent.Builder prepareApplicationComponent() {
         return DaggerApplicationComponent.builder()
-                .applicationModule(new ApplicationModule(this));
+                .applicationModule(new ApplicationModule(this))
+                .modelsModule(new ModelsModule(getStorageDirectory(), getRootDirectory()));
     }
 
 }

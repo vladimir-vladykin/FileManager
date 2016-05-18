@@ -1,38 +1,34 @@
 package net.vladykin.filemanager.entity;
 
-import android.net.Uri;
-import android.support.annotation.Nullable;
-
-import java.io.File;
+import net.vladykin.filemanager.util.file.FilesSource;
 
 /**
  * Entity for represent source,
  * from which we can load list of files.
- * todo update this for keep FileSource
+ *
  * @author Vladimir Vladykin
  */
 public final class FileSourceItem {
 
     private final String title;
-    private final File rootFile;
-    @Nullable private final Uri iconUri;
+    private final int iconId;
+    private final FilesSource source;
 
-    public FileSourceItem(String title, File rootFile, @Nullable Uri iconUri) {
+    public FileSourceItem(String title, int iconId, FilesSource source) {
         this.title = title;
-        this.rootFile = rootFile;
-        this.iconUri = iconUri;
+        this.iconId = iconId;
+        this.source = source;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public File getRootFile() {
-        return rootFile;
+    public int getIconId() {
+        return iconId;
     }
 
-    @Nullable
-    public Uri getIconUri() {
-        return iconUri;
+    public FilesSource getSource() {
+        return source;
     }
 }

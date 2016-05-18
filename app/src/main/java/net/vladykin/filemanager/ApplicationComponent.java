@@ -1,7 +1,7 @@
 package net.vladykin.filemanager;
 
 import net.vladykin.filemanager.fragment.FileListFragment;
-import net.vladykin.filemanager.fragment.FilesSourcesFragment;
+import net.vladykin.filemanager.fragment.FileSourcesFragment;
 import net.vladykin.filemanager.model.ModelsModule;
 import net.vladykin.filemanager.presenter.PresenterModule;
 import net.vladykin.filemanager.util.FileModule;
@@ -20,5 +20,5 @@ import dagger.Component;
 public interface ApplicationComponent {
 
     void inject(FileListFragment fragment);
-    void inject(FilesSourcesFragment fragment);
+    void inject(FileSourcesFragment fragment);
 }

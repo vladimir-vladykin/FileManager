@@ -37,6 +37,10 @@ public final class FilesSourcesPresenter extends Presenter<FilesSourcesView> {
         }
     }
 
+    public void onFileSourceClick(FileSourceItem source) {
+        view().displayFilesHierarchy(source);
+    }
+
     private void prepareSourcesIfNecessary() {
         model.prepareFilesSources()
                 .subscribe(
@@ -44,7 +48,11 @@ public final class FilesSourcesPresenter extends Presenter<FilesSourcesView> {
                             sources.clear();
                             sources.addAll(filesSources);
                             view().setFilesSources(sources);
-                        } // todo error handling here
+                        },
+                        throwable -> {
+                            // todo show error in view
+                            throwable.printStackTrace();
+                        }
                 );
     }
 
