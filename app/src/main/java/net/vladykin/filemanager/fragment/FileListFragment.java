@@ -162,6 +162,9 @@ public final class FileListFragment extends BaseFragment
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         switch (itemId) {
+            case R.id.action_update:
+                presenter.onRefreshClick();
+                break;
             case R.id.action_new_file:
                 presenter.onCreateFileClick();
                 return true;
@@ -169,6 +172,7 @@ public final class FileListFragment extends BaseFragment
                 presenter.onCreateDirectoryClick();
                 return true;
             case R.id.action_sort:
+                // fixme why not presenter decide should we show order ui?
                 showOrderUi();
                 return true;
         }

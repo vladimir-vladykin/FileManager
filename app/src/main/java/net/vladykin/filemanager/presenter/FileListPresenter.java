@@ -185,6 +185,10 @@ public final class FileListPresenter extends Presenter<FileListView>
         unsubcribeAfterUnbind(subscription);
     }
 
+    public void onRefreshClick() {
+        loadData();
+    }
+
     public void onCreateFileClick() {
         view().showCreateFileUi(false);
     }
