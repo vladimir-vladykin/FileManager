@@ -2,7 +2,7 @@ package net.vladykin.filemanager.model;
 
 import android.support.annotation.NonNull;
 
-import net.vladykin.filemanager.util.file.FilesSource;
+import net.vladykin.filemanager.model.source.FilesSource;
 
 /**
  * TODO comment

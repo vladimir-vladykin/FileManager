@@ -1,6 +1,6 @@
 package net.vladykin.filemanager.entity;
 
-import net.vladykin.filemanager.util.file.FilesSource;
+import net.vladykin.filemanager.model.source.FilesSource;
 
 /**
  * Entity for represent source,

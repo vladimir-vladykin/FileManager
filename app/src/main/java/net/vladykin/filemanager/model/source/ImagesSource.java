@@ -1,4 +1,4 @@
-package net.vladykin.filemanager.util.file;
+package net.vladykin.filemanager.model.source;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 
+import net.vladykin.filemanager.BaseApp;
 import net.vladykin.filemanager.entity.FileItem;
 
 import java.io.File;
@@ -22,12 +23,12 @@ import javax.inject.Inject;
  */
 public final class ImagesSource implements FilesSource {
 
-    @NonNull private Context context;
+//    @NonNull private Context context;
     @NonNull private String title;
 
     @Inject
-    public ImagesSource(@NonNull Context context, @NonNull String title) {
-        this.context = context;
+    public ImagesSource(/*@NonNull Context context, */@NonNull String title) {
+//        this.context = context;
         this.title = title;
     }
 
@@ -52,11 +53,7 @@ public final class ImagesSource implements FilesSource {
 
     @Override
     public List<FileItem> getFileList() {
-        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        String[] projection = {MediaStore.MediaColumns.DATA};
-
-        Cursor cursor = context.getContentResolver().
-                query(uri, projection, null, null, null);
+        Cursor cursor = prepareCursor(BaseApp.instance().getApplicationContext());
         if (cursor == null) {
              return Collections.emptyList();
         }
@@ -71,6 +68,15 @@ public final class ImagesSource implements FilesSource {
 
         cursor.close();
         return items;
+    }
+
+    private Cursor prepareCursor(Context context) {
+        // todo probably cache cursor, but as volatile
+        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        String[] projection = {MediaStore.MediaColumns.DATA};
+
+        return context.getContentResolver().
+                query(uri, projection, null, null, null);
     }
 
     private FileItem createFileItem(String pathToFile) {

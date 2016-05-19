@@ -30,7 +30,7 @@ import net.vladykin.filemanager.util.FileActions;
 import net.vladykin.filemanager.util.FileModule;
 import net.vladykin.filemanager.util.FileUtils;
 import net.vladykin.filemanager.util.OnFileItemClickListener;
-import net.vladykin.filemanager.util.file.FilesSource;
+import net.vladykin.filemanager.model.source.FilesSource;
 import net.vladykin.filemanager.util.order.FileOrders;
 import net.vladykin.filemanager.view.FileListView;
 

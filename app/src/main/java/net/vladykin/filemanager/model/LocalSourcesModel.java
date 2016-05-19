@@ -5,10 +5,10 @@ import android.support.annotation.NonNull;
 
 import net.vladykin.filemanager.R;
 import net.vladykin.filemanager.entity.FileSourceItem;
-import net.vladykin.filemanager.util.file.AudioSource;
-import net.vladykin.filemanager.util.file.FileSystemSource;
-import net.vladykin.filemanager.util.file.ImagesSource;
-import net.vladykin.filemanager.util.file.VideosSource;
+import net.vladykin.filemanager.model.source.AudioSource;
+import net.vladykin.filemanager.model.source.FileSystemSource;
+import net.vladykin.filemanager.model.source.ImagesSource;
+import net.vladykin.filemanager.model.source.VideosSource;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -58,7 +58,7 @@ public final class LocalSourcesModel implements FilesSourcesModel {
         String title = context.getString(R.string.file_source_images_title);
         return new FileSourceItem(
                 title, R.drawable.ic_images,
-                new ImagesSource(context, title)
+                new ImagesSource(/*context, */title)
         );
     }
 
@@ -66,7 +66,7 @@ public final class LocalSourcesModel implements FilesSourcesModel {
         String title = context.getString(R.string.file_source_audio_title);
         return new FileSourceItem(
                 title, R.drawable.ic_audio,
-                new AudioSource(context, title)
+                new AudioSource(/*context, */title)
         );
     }
 
@@ -74,7 +74,7 @@ public final class LocalSourcesModel implements FilesSourcesModel {
         String title = context.getString(R.string.file_source_video_title);
         return new FileSourceItem(
                 title, R.drawable.ic_video,
-                new VideosSource(context, title)
+                new VideosSource(/*context, */title)
         );
     }
 

@@ -3,7 +3,7 @@ package net.vladykin.filemanager.model;
 import android.support.annotation.NonNull;
 
 import net.vladykin.filemanager.entity.FileItem;
-import net.vladykin.filemanager.util.file.FilesSource;
+import net.vladykin.filemanager.model.source.FilesSource;
 
 import java.util.List;
 

@@ -9,7 +9,7 @@ import net.vladykin.filemanager.entity.FileItem;
 import net.vladykin.filemanager.model.FileModel;
 import net.vladykin.filemanager.util.FileActionsCallbacks;
 import net.vladykin.filemanager.util.FileManager;
-import net.vladykin.filemanager.util.file.FilesSource;
+import net.vladykin.filemanager.model.source.FilesSource;
 import net.vladykin.filemanager.util.order.FileOrdersCallback;
 import net.vladykin.filemanager.view.FileListView;
 
@@ -44,7 +44,6 @@ public final class FileListPresenter extends Presenter<FileListView>
     @NonNull private final FileModel model;
     @NonNull private final FileManager fileManager;
     @NonNull private final FilesSource root;
-//    @NonNull private final File rootDirectory;
 
     private final List<FileItem> originalItems;
     private final List<FileItem> filteredItems;

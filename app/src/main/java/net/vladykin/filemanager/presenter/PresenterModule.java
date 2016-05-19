@@ -2,11 +2,10 @@ package net.vladykin.filemanager.presenter;
 
 import android.support.annotation.NonNull;
 
-import net.vladykin.filemanager.PresenterScope;
 import net.vladykin.filemanager.model.FileModel;
 import net.vladykin.filemanager.model.FilesSourcesModel;
 import net.vladykin.filemanager.util.FileManager;
-import net.vladykin.filemanager.util.file.FilesSource;
+import net.vladykin.filemanager.model.source.FilesSource;
 
 import dagger.Module;
 import dagger.Provides;

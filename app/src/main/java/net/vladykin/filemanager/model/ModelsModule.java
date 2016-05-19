@@ -3,8 +3,8 @@ package net.vladykin.filemanager.model;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import net.vladykin.filemanager.PresenterScope;
-import net.vladykin.filemanager.util.file.FilesSource;
+import net.vladykin.filemanager.presenter.PresenterScope;
+import net.vladykin.filemanager.model.source.FilesSource;
 
 import java.io.File;
 

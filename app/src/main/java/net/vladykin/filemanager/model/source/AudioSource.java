@@ -1,4 +1,4 @@
-package net.vladykin.filemanager.util.file;
+package net.vladykin.filemanager.model.source;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 
+import net.vladykin.filemanager.BaseApp;
 import net.vladykin.filemanager.entity.FileItem;
 
 import java.io.File;
@@ -16,39 +17,39 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
- * Source for load all videos from device.
+ * Source for load all audio files from device storage.
  *
  * @author Vladimir Vladykin
  */
-public final class VideosSource implements FilesSource {
+public final class AudioSource implements FilesSource {
 
-    private static final String[] VIDEO_PROJECTION = new String[] {
-            MediaStore.Video.Media.DATA
+    private static final String[] AUDIO_PROJECTION = new String[] {
+            MediaStore.Audio.Media.DATA
     };
 
-    @NonNull private Context context;
+//    @NonNull private Context context;
     @NonNull private String title;
 
     @Inject
-    public VideosSource(@NonNull Context context, @NonNull String title) {
-        this.context = context;
+    public AudioSource(/*@NonNull Context context, */@NonNull String title) {
+//        this.context = context;
         this.title = title;
     }
 
     @Override
     public List<FileItem> getFileList() {
-        Cursor videoCursor = prepareVideoCursor();
-        if (videoCursor == null || !videoCursor.moveToNext()) {
+        Cursor audioCursor = prepareAudioCursor(BaseApp.instance().getApplicationContext());
+        if (audioCursor == null || !audioCursor.moveToFirst()) {
             return Collections.emptyList();
         }
 
-        int columnIndexData = videoCursor.getColumnIndex(MediaStore.Video.Media.DATA);
+        int columnIndexData = audioCursor.getColumnIndex(MediaStore.Audio.Media.DATA);
         List<FileItem> items = new ArrayList<>();
         do {
-            String filePath = videoCursor.getString(columnIndexData);
+            String filePath = audioCursor.getString(columnIndexData);
             File file = new File(filePath);
             items.add(new FileItem(file));
-        } while (videoCursor.moveToNext());
+        } while (audioCursor.moveToNext());
 
         return items;
     }
@@ -63,6 +64,7 @@ public final class VideosSource implements FilesSource {
 
     @Override
     public boolean isRootDirectory(File item) {
+        // todo comment
         return true;
     }
 
@@ -71,9 +73,10 @@ public final class VideosSource implements FilesSource {
         return title;
     }
 
-    private Cursor prepareVideoCursor() {
-        Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+    private Cursor prepareAudioCursor(Context context) {
+        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
         return context.getContentResolver().query(
-                uri, VIDEO_PROJECTION, null, null, null);
+                uri, AUDIO_PROJECTION, selection, null, null);
     }
 }

@@ -1,4 +1,4 @@
-package net.vladykin.filemanager;
+package net.vladykin.filemanager.presenter;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

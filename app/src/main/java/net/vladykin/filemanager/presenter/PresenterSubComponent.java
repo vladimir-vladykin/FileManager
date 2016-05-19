@@ -1,6 +1,5 @@
 package net.vladykin.filemanager.presenter;
 
-import net.vladykin.filemanager.PresenterScope;
 import net.vladykin.filemanager.fragment.FileListFragment;
 import net.vladykin.filemanager.fragment.FileSourcesFragment;
 import net.vladykin.filemanager.model.ModelsModule;

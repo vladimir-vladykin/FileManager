@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 
 import net.vladykin.filemanager.fragment.FileListFragment;
 import net.vladykin.filemanager.fragment.FileSourcesFragment;
-import net.vladykin.filemanager.util.file.FilesSource;
+import net.vladykin.filemanager.model.source.FilesSource;
 
 /**
  * Class for handle navigation within application.
