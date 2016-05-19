@@ -2,6 +2,8 @@ package net.vladykin.filemanager.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -13,6 +15,7 @@ import net.vladykin.filemanager.ApplicationComponent;
 import net.vladykin.filemanager.FileManagerApp;
 import net.vladykin.filemanager.MainActivity;
 import net.vladykin.filemanager.R;
+import net.vladykin.filemanager.ToolbarController;
 import net.vladykin.filemanager.navigation.MainRouter;
 
 public abstract class BaseFragment extends Fragment
@@ -20,6 +23,7 @@ public abstract class BaseFragment extends Fragment
 
     protected MainActivity mActivity;
     private MaterialDialog mMessageDialog;
+    private ToolbarController mToolbarController;
 
 //    @Override
 //    public void onAttach(Activity activity) {
@@ -34,6 +38,8 @@ public abstract class BaseFragment extends Fragment
         super.onAttach(context);
         mActivity = (MainActivity) getActivity();
         mActivity.setOnBackPressedListener(this);
+
+        mToolbarController = (ToolbarController) getActivity();
     }
 
     @Override
@@ -57,6 +63,14 @@ public abstract class BaseFragment extends Fragment
 
     protected void hideBackButton() {
         mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+    }
+
+    protected void setToolbarTitle(@StringRes int titleId) {
+        setToolbarTitle(getResources().getString(titleId));
+    }
+
+    protected void setToolbarTitle(@Nullable CharSequence title) {
+        mToolbarController.setToolbarTitle(title);
     }
 
     protected void showMessage(int titleId, int contentId) {

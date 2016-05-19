@@ -114,6 +114,12 @@ public final class FileListFragment extends BaseFragment
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        setToolbarTitle(presenter.getSourceTitle());
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == READ_EXTERNAL_STORAGE_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

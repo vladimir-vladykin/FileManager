@@ -1,6 +1,7 @@
 package net.vladykin.filemanager;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -8,7 +9,8 @@ import android.view.MenuItem;
 import net.vladykin.filemanager.navigation.MainRouter;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements ToolbarController {
 
     private Toolbar mToolbar;
     private OnBackPressedListener mBackPressedListener;
@@ -45,6 +47,13 @@ public class MainActivity extends AppCompatActivity {
 
     public MainRouter getRouter() {
         return router;
+    }
+
+    @Override
+    public void setToolbarTitle(@Nullable CharSequence title) {
+        if (mToolbar != null) {
+            mToolbar.setTitle(title);
+        }
     }
 
     @Override

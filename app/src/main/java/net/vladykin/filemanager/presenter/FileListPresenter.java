@@ -111,6 +111,10 @@ public final class FileListPresenter extends Presenter<FileListView>
         view().showFileActionsUi(filteredItems.get(position));
     }
 
+    public CharSequence getSourceTitle() {
+        return root.title();
+    }
+
     /**
      * Returns true, if event was handled, false otherwise.
      */

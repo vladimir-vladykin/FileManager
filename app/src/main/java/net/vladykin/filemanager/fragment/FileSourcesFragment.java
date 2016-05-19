@@ -67,6 +67,12 @@ public final class FileSourcesFragment extends BaseFragment
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        setToolbarTitle(R.string.file_source_title);
+    }
+
+    @Override
     public void setFilesSources(List<FileSourceItem> sources) {
         adapter.setItems(sources);
     }
