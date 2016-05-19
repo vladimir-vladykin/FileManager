@@ -73,7 +73,7 @@ public final class FileListPresenter extends Presenter<FileListView>
     public void bindView(@NonNull FileListView view) {
         super.bindView(view);
 
-        setViewBackButtonVisible(!root.isRootDirectory(currentDirectory) /*currentDirectory != rootDirectory*/);
+        setViewBackButtonVisible(true/*!root.isRootDirectory(currentDirectory)*/);
     }
 
     public void loadData() {
@@ -291,7 +291,11 @@ public final class FileListPresenter extends Presenter<FileListView>
         root.setCurrentDirectory(currentDirectory);
 
         boolean shouldShowBackButton = !isRootDirectory(currentDirectory);
-        setViewBackButtonVisible(shouldShowBackButton);
+
+        // currently we always display back button, because
+        // we have to keep in mind FilesSourceFragment.
+        // todo dispatch nicely in future, or not dispatch at all
+        setViewBackButtonVisible(true/*shouldShowBackButton*/);
 
         loadData();
     }

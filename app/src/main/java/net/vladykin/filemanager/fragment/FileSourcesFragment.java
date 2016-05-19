@@ -69,6 +69,9 @@ public final class FileSourcesFragment extends BaseFragment
     @Override
     public void onResume() {
         super.onResume();
+
+        // fixme this is hack, we don't have to dispatch it here
+        hideBackButton();
         setToolbarTitle(R.string.file_source_title);
     }
 
