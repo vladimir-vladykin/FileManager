@@ -27,7 +27,7 @@ import java.util.Locale;
  * Adapter for list of files.
  * Takes care about enter animation, when necessary.
  */
-public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder> {
+public final class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHolder> {
     private static final int ICONS_CACHE_SIZE = 2;
 
     private Context mContext;

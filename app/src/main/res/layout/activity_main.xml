@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/primary"
-            app:elevation="5dp"
+            app:elevation="@dimen/toolbar.elevation"
             app:layout_scrollFlags="scroll|enterAlways"
             app:theme="@style/ThemeOverlay.AppCompat.Dark"
             app:popupTheme="@style/Theme.AppCompat.Light"/>

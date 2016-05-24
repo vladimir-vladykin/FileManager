@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import net.vladykin.filemanager.BaseApp;
 import net.vladykin.filemanager.entity.FileItem;
@@ -61,6 +62,12 @@ public final class AudioSource implements FilesSource {
 
     @Override
     public void setCurrentDirectory(File item) {}
+
+    @Nullable
+    @Override
+    public File getCurrentDirectory() {
+        return null;
+    }
 
     @Override
     public boolean isRootDirectory(File item) {

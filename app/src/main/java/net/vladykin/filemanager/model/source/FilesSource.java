@@ -1,5 +1,7 @@
 package net.vladykin.filemanager.model.source;
 
+import android.support.annotation.Nullable;
+
 import net.vladykin.filemanager.entity.FileItem;
 
 import java.io.File;
@@ -17,6 +19,7 @@ public interface FilesSource extends Serializable {
 
     File getRootDirectory();
     void setCurrentDirectory(File item);
+    @Nullable File getCurrentDirectory();
     boolean isRootDirectory(File item);
     String title();
     List<FileItem> getFileList();

@@ -1,6 +1,7 @@
 package net.vladykin.filemanager.model.source;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import net.vladykin.filemanager.entity.FileItem;
 
@@ -36,6 +37,11 @@ public final class FileSystemSource implements FilesSource {
     @Override
     public void setCurrentDirectory(File file) {
         currentDirectory = file;
+    }
+
+    @Override @Nullable
+    public File getCurrentDirectory() {
+        return currentDirectory;
     }
 
     @Override

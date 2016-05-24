@@ -66,6 +66,8 @@
         <item quantity="other">%d файлов</item>
     </plurals>
 
+    <string name="root.directory.title">Корневая папка</string>
+
     <!-- File source screen -->
     <string name="file.source.title">Категории</string>
     <string name="file.source.images.title">Изображения</string>

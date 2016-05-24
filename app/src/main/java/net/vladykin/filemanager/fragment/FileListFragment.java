@@ -2,6 +2,7 @@ package net.vladykin.filemanager.fragment;
 
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,6 +25,7 @@ import com.pnikosis.materialishprogress.ProgressWheel;
 
 import net.vladykin.filemanager.R;
 import net.vladykin.filemanager.adapter.FileAdapter;
+import net.vladykin.filemanager.adapter.FileHierarchyAdapter;
 import net.vladykin.filemanager.entity.FileItem;
 import net.vladykin.filemanager.presenter.FileListPresenter;
 import net.vladykin.filemanager.util.FileActions;
@@ -52,6 +54,7 @@ public final class FileListFragment extends BaseFragment
 
     private static final String SOURCE = "source";
 
+    @Bind(R.id.hierarchy_recycler_view) RecyclerView hierarchyRecyclerView;
     @Bind(R.id.file_list_view) RecyclerView recyclerView;
     @Bind(R.id.file_list_progress_bar) ProgressWheel progressBar;
     @Bind(R.id.file_list_empty_text) TextView emptyView;
@@ -59,6 +62,7 @@ public final class FileListFragment extends BaseFragment
 
     @Inject FileListPresenter presenter;
     private FileAdapter adapter;
+    private FileHierarchyAdapter hierarchyAdapter;
 
     public static FileListFragment newInstance(FilesSource source) {
         Bundle args = new Bundle();
@@ -78,6 +82,9 @@ public final class FileListFragment extends BaseFragment
                 .inject(this);
 
         adapter = new FileAdapter(mActivity);
+        hierarchyAdapter = new FileHierarchyAdapter(source, getString(R.string.root_directory_title));
+        hierarchyAdapter.setHasStableIds(true);
+        hierarchyAdapter.setClickListener(presenter);
         presenter.restoreState(savedInstanceState);
     }
 
@@ -91,6 +98,7 @@ public final class FileListFragment extends BaseFragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
         setupRecyclerView();
+        setupHierarchyRecyclerView();
 
         presenter.bindView(this);
 
@@ -118,6 +126,7 @@ public final class FileListFragment extends BaseFragment
         super.onResume();
         setToolbarTitle(presenter.getSourceTitle());
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -195,13 +204,25 @@ public final class FileListFragment extends BaseFragment
         establishViewsVisibility(false, true, false);
         adapter.setFilesInfo(files);
 
+        // fixme presenter should decide, when to update hierarchy list
+        updateHierarchyUi();
+
         // todo maybe not the best decision
         recyclerView.post(() -> recyclerView.scrollToPosition(0));
     }
 
     @Override
     public void showEmptyView() {
+        // fixme should not be here, but in presenter
+        updateHierarchyUi();
+
         establishViewsVisibility(false, false, true);
+    }
+
+    public void updateHierarchyUi() {
+        hierarchyAdapter.notifyHierarchyUpdated();
+        hierarchyRecyclerView.post(() ->
+                hierarchyRecyclerView.scrollToPosition(hierarchyAdapter.getItemCount()));
     }
 
     @Override
@@ -291,6 +312,18 @@ public final class FileListFragment extends BaseFragment
         recyclerView.addOnItemTouchListener(
                 new OnFileItemClickListener(mActivity, recyclerView, this));
         recyclerView.setAdapter(adapter);
+    }
+
+    private void setupHierarchyRecyclerView() {
+        hierarchyRecyclerView.setLayoutManager(new LinearLayoutManager(
+                mActivity, LinearLayoutManager.HORIZONTAL, false
+        ));
+        hierarchyRecyclerView.setAdapter(hierarchyAdapter);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            hierarchyRecyclerView.setElevation(getResources()
+                    .getDimensionPixelSize(R.dimen.toolbar_elevation));
+        }
     }
 
     private void establishViewsVisibility(boolean progressVisible,

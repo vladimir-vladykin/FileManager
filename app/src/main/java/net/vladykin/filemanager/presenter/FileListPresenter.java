@@ -6,10 +6,12 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import net.vladykin.filemanager.entity.FileItem;
+import net.vladykin.filemanager.entity.Node;
 import net.vladykin.filemanager.model.FileModel;
 import net.vladykin.filemanager.util.FileActionsCallbacks;
 import net.vladykin.filemanager.util.FileManager;
 import net.vladykin.filemanager.model.source.FilesSource;
+import net.vladykin.filemanager.util.callback.HierarchyNodeClickListener;
 import net.vladykin.filemanager.util.order.FileOrdersCallback;
 import net.vladykin.filemanager.view.FileListView;
 
@@ -36,7 +38,7 @@ import static net.vladykin.filemanager.util.order.FileItemComparators.alphabet;
  * @author Vladimir Vladykin.
  */
 public final class FileListPresenter extends Presenter<FileListView>
-        implements FileActionsCallbacks, FileOrdersCallback {
+        implements FileActionsCallbacks, FileOrdersCallback, HierarchyNodeClickListener {
 
     private static final int SEARCH_DELAY = 50;
     private static final String CURRENT_DIRECTORY_KEY = "file_key";
@@ -232,6 +234,27 @@ public final class FileListPresenter extends Presenter<FileListView>
             reorderItems();
             view().showFileList(filteredItems);
         }
+    }
+
+    @Override
+    public void onHierarchyNodeClick(Node node) {
+        File directory = node.getDirectory();
+        if (directory == null) {
+            // nothing to do here, it is probably
+            // click on root folder in images list, for instance
+            return;
+        }
+
+        if (currentDirectory.equals(directory)) {
+            // already opened, nothing to do
+            return;
+        }
+
+        if (!directory.isDirectory() || !directory.exists()) {
+            throw new IllegalStateException("Node should be a directory and this directory should be created before");
+        }
+
+        openDirectory(directory);
     }
 
     @Override /** @hide */
