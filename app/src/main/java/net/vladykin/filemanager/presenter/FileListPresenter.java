@@ -55,6 +55,8 @@ public final class FileListPresenter extends Presenter<FileListView>
     private CharSequence searchKey;
 
     private boolean wasFirstSearchKeyPassed;
+    @Nullable private FileItem itemToCopy;
+    @Nullable private FileItem itemToMove;
 
     @Inject
     public FileListPresenter(@NonNull FileModel model,
@@ -63,7 +65,6 @@ public final class FileListPresenter extends Presenter<FileListView>
         this.model = model;
         this.fileManager = fileManager;
         this.root = root;
-//        this.rootDirectory = rootDirectory;
 
         currentDirectory = root.getRootDirectory();
         originalItems = new ArrayList<>();
@@ -161,6 +162,7 @@ public final class FileListPresenter extends Presenter<FileListView>
                             }
                         },
                         throwable ->
+                                // fixme really??? why we need empty view in that case???
                                 showErrorAndEmptyView("Cannot rename file", throwable)
                 );
 
@@ -257,6 +259,52 @@ public final class FileListPresenter extends Presenter<FileListView>
         openDirectory(directory);
     }
 
+    public void onInsertFileButtonClick() {
+        if (itemToMove == null && itemToCopy == null) {
+            Log.e("FileListPresenter", "We have to have itemToMove or itemToCopy for perform instert." +
+                    " How you actually called this method???");
+            return;
+        }
+
+        boolean shouldMoveItem = itemToMove != null;
+        File from = shouldMoveItem ? itemToMove.getFile() : itemToCopy.getFile();
+        File to = new File(currentDirectory, from.getName());
+
+        if (to.equals(from)) {
+            view().showError("Cannot insert file here", new UnsupportedOperationException());
+            return;
+        }
+
+        Single<File> single = shouldMoveItem ?
+                fileManager.move(from, to) : fileManager.copy(from, to);
+        Subscription subscription = single.subscribe(
+                insertedItem -> {
+                    FileItem newFileItem = new FileItem(insertedItem);
+                    originalItems.add(newFileItem);
+
+                    filterItems();
+                    reorderItems();
+
+                    int newItemIndex = filteredItems.indexOf(newFileItem);
+                    view().setInsertFileUiActive(false);
+
+                    // FIXME we should only call for insert item, but currently we have the problem with inserting in invisible empty RecyclerView
+                    if (filteredItems.size() == 1) {
+                        // first inserting
+                        view().showFileList(filteredItems);
+                    } else {
+                        view().insertItem(newItemIndex);
+                    }
+                },
+                throwable ->
+                        view().showError(
+                                "Cannot insert file:\n" + throwable.getMessage(),
+                                throwable)
+        );
+
+        unsubcribeAfterUnbind(subscription);
+    }
+
     @Override /** @hide */
     public void onOpen(FileItem fileItem) {
         dispatchFileOpening(fileItem.getFile());
@@ -264,12 +312,14 @@ public final class FileListPresenter extends Presenter<FileListView>
 
     @Override /** @hide */
     public void onCopy(FileItem fileItem) {
-//        fileManager.copy(file);
+        itemToCopy = fileItem;
+        view().setInsertFileUiActive(true);
     }
 
     @Override /** @hide */
     public void onMove(FileItem fileItem) {
-//        fileManager.move(file);
+        itemToMove = fileItem;
+        view().setInsertFileUiActive(true);
     }
 
     @Override /** @hide */

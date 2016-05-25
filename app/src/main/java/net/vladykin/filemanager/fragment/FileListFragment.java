@@ -108,10 +108,9 @@ public final class FileListFragment extends BaseFragment
         } else if (shouldShowStorageRationale(activity)) {
             showEmptyView();
 
-            // todo text from resources
             showMessageWithAction(
-                    "You need to allow app to read internal storage, if you want to use it",
-                    "Allow",
+                    getString(R.string.permission_storage_rationale),
+                    getString(R.string.permission_allow),
                     () -> requestReadExternalStorage(this)
 
             );
@@ -226,12 +225,32 @@ public final class FileListFragment extends BaseFragment
     }
 
     @Override
+    public void insertItem(int position) {
+        adapter.notifyItemInserted(position);
+
+//        if (recyclerView.getVisibility() != View.VISIBLE) {
+//            establishViewsVisibility(false, true, false);
+//        }
+
+//        recyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+//            @Override
+//            public boolean onPreDraw() {
+//                recyclerView.getViewTreeObserver().removeOnPreDrawListener(this);
+//
+//                ;
+//                return true;
+//            }
+//        });
+    }
+
+    @Override
     public void updateItem(int position) {
         adapter.notifyItemChanged(position);
     }
 
     @Override
     public void removeItem(int position) {
+        // todo we have to actually check should we show empty view or not (but presenter should check this rather then fragment)
         adapter.notifyItemRemoved(position);
     }
 
@@ -303,6 +322,18 @@ public final class FileListFragment extends BaseFragment
                     presenter.createFile(input.toString(), forDirectory);
                 }
         );
+    }
+
+    @Override
+    public void setInsertFileUiActive(boolean active) {
+        if (!active) {
+            getFloatingButtonController().hideActionButton();
+            return;
+        }
+
+        getFloatingButtonController().showActionButton(button -> {
+            presenter.onInsertFileButtonClick();
+        });
     }
 
     private void setupRecyclerView() {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">FileManager</string>
+    <string name="app_name">Файловый Менеджер</string>
 
     <!-- Actions -->
     <string name="action_new_folder">Новая папка</string>
@@ -75,4 +75,12 @@
     <string name="file.source.video.title">Видео</string>
     <string name="file.source.storage.title">Локальное хранилище</string>
     <string name="file.source.root.title">Корневая папка (для опытных пользователей)</string>
+
+    <!-- Permissions -->
+    <string name="permission.storage.rationale">Вам нужно разрешить приложению доступ к внутренему хранилищу для корректной работы</string>
+    <string name="permission.allow">Разрешить</string>
+
+    <!-- File inserting -->
+    <string name="file.insert.wrong.directory">Невозможно вставить в эту директорию</string>
+
 </resources>

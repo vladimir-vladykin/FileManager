@@ -23,6 +23,7 @@ public interface FileListView {
     /**
      * Methods for update part of list.
      */
+    void insertItem(int position);
     void updateItem(int position);
     void removeItem(int position);
     void moveItem(int from, int to);
@@ -55,4 +56,6 @@ public interface FileListView {
     void showRenameUi(FileItem fileItem);
 
     void showCreateFileUi(boolean forDirectory);
+
+    void setInsertFileUiActive(boolean active);
 }

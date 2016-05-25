@@ -13,6 +13,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.vladykin.filemanager.ApplicationComponent;
 import net.vladykin.filemanager.FileManagerApp;
+import net.vladykin.filemanager.FloatingButtonController;
 import net.vladykin.filemanager.MainActivity;
 import net.vladykin.filemanager.R;
 import net.vladykin.filemanager.ToolbarController;
@@ -24,6 +25,7 @@ public abstract class BaseFragment extends Fragment
     protected MainActivity mActivity;
     private MaterialDialog mMessageDialog;
     private ToolbarController mToolbarController;
+    private FloatingButtonController mFloatingButtonController;
 
 //    @Override
 //    public void onAttach(Activity activity) {
@@ -40,6 +42,7 @@ public abstract class BaseFragment extends Fragment
         mActivity.setOnBackPressedListener(this);
 
         mToolbarController = (ToolbarController) getActivity();
+        mFloatingButtonController = (FloatingButtonController) getActivity();
     }
 
     @Override
@@ -53,8 +56,18 @@ public abstract class BaseFragment extends Fragment
                 .build();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mFloatingButtonController.hideActionButton();
+    }
+
     protected MainRouter getRouter() {
         return mActivity.getRouter();
+    }
+
+    public FloatingButtonController getFloatingButtonController() {
+        return mFloatingButtonController;
     }
 
     protected void showBackButton() {

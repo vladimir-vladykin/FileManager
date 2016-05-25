@@ -30,4 +30,20 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floating_action_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_normal"
+        android:layout_marginRight="@dimen/margin_normal"
+        android:layout_marginEnd="@dimen/margin_normal"
+        android:visibility="gone"
+        app:layout_behavior="net.vladykin.filemanager.util.ScrollAwareFloatingBehavior"
+        app:srcCompat="@drawable/ic_insert_file"
+        app:elevation="6dp"
+        app:pressedTranslationZ="12dp"
+        app:layout_anchor="@id/container"
+        app:layout_anchorGravity="bottom|end"
+        tools:visibility="visible"/>
+
 </android.support.design.widget.CoordinatorLayout>

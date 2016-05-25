@@ -1,10 +1,16 @@
 package net.vladykin.filemanager.util;
 
+import android.support.annotation.NonNull;
+
 import net.vladykin.filemanager.FileManagerApp;
 import net.vladykin.filemanager.R;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import rx.Single;
 import rx.android.schedulers.AndroidSchedulers;
@@ -19,12 +25,27 @@ public final class LocalFileManager implements FileManager {
 
     @Override
     public Single<File> copy(File from, File to) {
-        return null;
+        return Single
+                .fromCallable(() -> {
+                    copyFile(from, to);
+                    return to;
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
     public Single<File> move(File from, File to) {
-        return null;
+        return Single
+                .fromCallable(() -> {
+                    copyFile(from, to);
+
+                    // is is move, so we have to delete old file
+                    deleteFile(from);
+                    return to;
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
@@ -117,6 +138,37 @@ public final class LocalFileManager implements FileManager {
         boolean result = file.delete();
         if (!result) {
             throw new RuntimeException("Cannot delete file " + file.getAbsolutePath());
+        }
+    }
+
+    // todo check is to name formated correctly
+    private void copyFile(@NonNull File from, @NonNull File to) throws IOException {
+        if (to.exists()) {
+            throw new IOException("File " + to.getName() +
+                    " is already exists");
+        }
+
+        if (from.isDirectory()) {
+            boolean ignored = to.mkdirs();
+
+            for (String child : from.list()) {
+                copyFile(
+                        new File(from, child),
+                        new File(to, child)
+                );
+            }
+        } else {
+            InputStream in = new FileInputStream(from);
+            OutputStream out = new FileOutputStream(to);
+
+            byte[] buffer = new byte[1024 * 8];
+            int length;
+            while ( (length = in.read(buffer)) > 0) {
+                out.write(buffer, 0, length);
+            }
+
+            in.close();
+            out.close();
         }
     }
 }

@@ -2,17 +2,20 @@ package net.vladykin.filemanager;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import net.vladykin.filemanager.navigation.MainRouter;
 
 
 public class MainActivity extends AppCompatActivity
-        implements ToolbarController {
+        implements ToolbarController, FloatingButtonController {
 
     private Toolbar mToolbar;
+    private FloatingActionButton mFloatingButton;
     private OnBackPressedListener mBackPressedListener;
     private MainRouter router;
 
@@ -23,6 +26,9 @@ public class MainActivity extends AppCompatActivity
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
+
+        mFloatingButton = (FloatingActionButton) findViewById(R.id.floating_action_button);
+        setFloatingButtonBehaviorActive(false);
 
         router = new MainRouter(getSupportFragmentManager(), R.id.container);
 
@@ -57,6 +63,20 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void showActionButton(View.OnClickListener clickListener) {
+        mFloatingButton.setOnClickListener(clickListener);
+        mFloatingButton.setVisibility(View.VISIBLE);
+        setFloatingButtonBehaviorActive(true);
+    }
+
+    @Override
+    public void hideActionButton() {
+        mFloatingButton.setOnClickListener(null);
+        mFloatingButton.setVisibility(View.GONE);
+        setFloatingButtonBehaviorActive(false);
+    }
+
+    @Override
     public void onBackPressed() {
         if (mBackPressedListener != null) {
             // if listener successful handled event
@@ -81,5 +101,17 @@ public class MainActivity extends AppCompatActivity
 
     public interface OnBackPressedListener {
         boolean onBackPressed();
+    }
+
+    private void setFloatingButtonBehaviorActive(boolean active) {
+        // todo behavior temporary disabled, I want it be always visible now for stability
+//        if (mFloatingButton == null) {
+//            return;
+//        }
+//
+//        CoordinatorLayout.LayoutParams params =
+//                (CoordinatorLayout.LayoutParams) mFloatingButton.getLayoutParams();
+//        ScrollAwareFloatingBehavior behavior = (ScrollAwareFloatingBehavior) params.getBehavior();
+//        behavior.setBehaviorActive(active);
     }
 }
