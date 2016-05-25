@@ -86,6 +86,7 @@ public abstract class BaseFragment extends Fragment
         mToolbarController.setToolbarTitle(title);
     }
 
+    // todo probably delete
     protected void showMessage(int titleId, int contentId) {
         showMessage(titleId, getString(contentId));
     }
@@ -94,6 +95,17 @@ public abstract class BaseFragment extends Fragment
         mMessageDialog.setTitle(titleId);
         mMessageDialog.setContent(content);
         mMessageDialog.show();
+    }
+
+    // todo this should be showMessage instead of methods with dialogs!!!
+    protected void showSnackbarMessage(@StringRes int messageId) {
+        View rootView = getView();
+        if (rootView == null) {
+            Log.e(getTag(), "Cannot show message, because fragment's root view is null");
+            return;
+        }
+        Snackbar.make(rootView, messageId, Snackbar.LENGTH_LONG)
+                .show();
     }
 
     protected void showMessageWithAction(CharSequence message,

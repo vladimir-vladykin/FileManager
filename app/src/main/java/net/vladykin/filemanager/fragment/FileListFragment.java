@@ -227,20 +227,6 @@ public final class FileListFragment extends BaseFragment
     @Override
     public void insertItem(int position) {
         adapter.notifyItemInserted(position);
-
-//        if (recyclerView.getVisibility() != View.VISIBLE) {
-//            establishViewsVisibility(false, true, false);
-//        }
-
-//        recyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-//            @Override
-//            public boolean onPreDraw() {
-//                recyclerView.getViewTreeObserver().removeOnPreDrawListener(this);
-//
-//                ;
-//                return true;
-//            }
-//        });
     }
 
     @Override
@@ -285,6 +271,19 @@ public final class FileListFragment extends BaseFragment
         // todo message from resources
         Snackbar.make(recyclerView, message, Snackbar.LENGTH_LONG)
                 .show();
+    }
+
+    @Override
+    public void showError(@ErrorCode int errorCode, @Nullable Throwable cause) {
+        if (cause != null) {
+            cause.printStackTrace();
+        }
+
+        switch (errorCode) {
+            case FILE_OPERATIONS_NOT_SUPPORTED:
+                showSnackbarMessage(R.string.file_action_not_allowed);
+                break;
+        }
     }
 
     @Override

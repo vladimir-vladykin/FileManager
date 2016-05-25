@@ -34,7 +34,7 @@ import static net.vladykin.filemanager.util.order.FileItemComparators.alphabet;
 
 /**
  * Presenter for view with file list.
- *
+ * FIXME don't check is currentDirectory is null, but display only allowed actions in FileListView!!
  * @author Vladimir Vladykin.
  */
 public final class FileListPresenter extends Presenter<FileListView>
@@ -49,7 +49,7 @@ public final class FileListPresenter extends Presenter<FileListView>
 
     private final List<FileItem> originalItems;
     private final List<FileItem> filteredItems;
-    private File currentDirectory;
+    @Nullable private File currentDirectory;
 
     private Comparator<FileItem> comparator;
     private CharSequence searchKey;
@@ -83,7 +83,7 @@ public final class FileListPresenter extends Presenter<FileListView>
         showViewLoading();
 
         Subscription subscription = model
-                .getFiles(/*currentDirectory*/)
+                .getFiles()
                 .subscribe(
                         this::saveFilesAndSetToView,
                         throwable ->
@@ -94,12 +94,15 @@ public final class FileListPresenter extends Presenter<FileListView>
     }
 
     public void saveState(Bundle outState) {
+        if (currentDirectory == null) {
+            return;
+        }
         // todo current search key and comparator could be saved too
         outState.putSerializable(CURRENT_DIRECTORY_KEY, currentDirectory);
     }
 
     public void restoreState(@Nullable Bundle savedState) {
-        if (savedState != null) {
+        if (savedState != null && savedState.containsKey(CURRENT_DIRECTORY_KEY)) {
             currentDirectory = (File) savedState.getSerializable(CURRENT_DIRECTORY_KEY);
             root.setCurrentDirectory(currentDirectory);
         }
@@ -194,10 +197,18 @@ public final class FileListPresenter extends Presenter<FileListView>
     }
 
     public void onCreateFileClick() {
+        if (!canDoFileOperations()) {
+            displayFileOperationsNotSupported();
+            return;
+        }
         view().showCreateFileUi(false);
     }
 
     public void onCreateDirectoryClick() {
+        if (!canDoFileOperations()) {
+            displayFileOperationsNotSupported();
+            return;
+        }
         view().showCreateFileUi(true);
     }
 
@@ -241,7 +252,7 @@ public final class FileListPresenter extends Presenter<FileListView>
     @Override
     public void onHierarchyNodeClick(Node node) {
         File directory = node.getDirectory();
-        if (directory == null) {
+        if (directory == null || currentDirectory == null) {
             // nothing to do here, it is probably
             // click on root folder in images list, for instance
             return;
@@ -312,12 +323,22 @@ public final class FileListPresenter extends Presenter<FileListView>
 
     @Override /** @hide */
     public void onCopy(FileItem fileItem) {
+        if (!canDoFileOperations()) {
+            displayFileOperationsNotSupported();
+            return;
+        }
+
         itemToCopy = fileItem;
         view().setInsertFileUiActive(true);
     }
 
     @Override /** @hide */
     public void onMove(FileItem fileItem) {
+        if (!canDoFileOperations()) {
+            displayFileOperationsNotSupported();
+            return;
+        }
+
         itemToMove = fileItem;
         view().setInsertFileUiActive(true);
     }
@@ -360,6 +381,11 @@ public final class FileListPresenter extends Presenter<FileListView>
     }
 
     private void openDirectory(File directory) {
+        if (!canDoFileOperations()) {
+            displayFileOperationsNotSupported();
+            return;
+        }
+
         currentDirectory = directory;
         root.setCurrentDirectory(currentDirectory);
 
@@ -432,7 +458,19 @@ public final class FileListPresenter extends Presenter<FileListView>
     }
 
     private void dispatchOnBack() {
+        if (currentDirectory == null) {
+            return;
+        }
         File parentDirectory = currentDirectory.getParentFile();
         openDirectory(parentDirectory);
+    }
+
+    // TODO this operator is actually hack, we should not display actions which are not supported for current mode
+    private boolean canDoFileOperations() {
+        return currentDirectory != null;
+    }
+
+    private void displayFileOperationsNotSupported() {
+        view().showError(FileListView.FILE_OPERATIONS_NOT_SUPPORTED, null);
     }
 }

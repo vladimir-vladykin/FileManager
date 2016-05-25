@@ -83,4 +83,7 @@
     <!-- File inserting -->
     <string name="file.insert.wrong.directory">Невозможно вставить в эту директорию</string>
 
+    <!-- Errors -->
+    <string name="file.action.not.allowed">Вы не можете выполнить эту операцию здесь</string>
+
 </resources>

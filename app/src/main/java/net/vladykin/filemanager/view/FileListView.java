@@ -1,8 +1,13 @@
 package net.vladykin.filemanager.view;
 
+import android.support.annotation.IntDef;
+import android.support.annotation.Nullable;
+
 import net.vladykin.filemanager.entity.FileItem;
 
 import java.io.File;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 /**
@@ -12,6 +17,14 @@ import java.util.List;
  * @author Vladimir Vladykin.
  */
 public interface FileListView {
+
+    int FILE_OPERATIONS_NOT_SUPPORTED = 1;
+
+    @IntDef(value = {
+            FILE_OPERATIONS_NOT_SUPPORTED
+    })
+    @Retention(RetentionPolicy.SOURCE)
+    @interface ErrorCode {}
 
     /**
      * Methods, which sets view to different states.
@@ -47,6 +60,8 @@ public interface FileListView {
      * Should show short time error message.
      */
     void showError(String message, Throwable error);
+
+    void showError(@ErrorCode int errorCode, @Nullable Throwable cause);
 
     /**
      * Shows to user possible actions with file.
