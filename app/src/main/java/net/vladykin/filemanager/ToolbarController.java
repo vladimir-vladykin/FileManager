@@ -10,4 +10,5 @@ import android.support.annotation.Nullable;
 public interface ToolbarController {
 
     void setToolbarTitle(@Nullable CharSequence title);
+    void setToolbarElevation(int elevation);
 }

@@ -124,6 +124,10 @@ public final class FileListFragment extends BaseFragment
     public void onResume() {
         super.onResume();
         setToolbarTitle(presenter.getSourceTitle());
+
+        // we don't want to toolbar elevation overlap hierarchy list elevation
+        // todo currently don't work
+//        setToolbarElevation(0);
     }
 
 

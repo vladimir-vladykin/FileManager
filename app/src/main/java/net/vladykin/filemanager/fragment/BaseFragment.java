@@ -59,7 +59,11 @@ public abstract class BaseFragment extends Fragment
     @Override
     public void onResume() {
         super.onResume();
+
+        // default values
         mFloatingButtonController.hideActionButton();
+        mToolbarController.setToolbarElevation(getResources()
+                .getDimensionPixelSize(R.dimen.toolbar_elevation));
     }
 
     protected MainRouter getRouter() {
@@ -84,6 +88,10 @@ public abstract class BaseFragment extends Fragment
 
     protected void setToolbarTitle(@Nullable CharSequence title) {
         mToolbarController.setToolbarTitle(title);
+    }
+
+    protected void setToolbarElevation(int elevation) {
+        mToolbarController.setToolbarElevation(elevation);
     }
 
     // todo probably delete
