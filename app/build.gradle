@@ -5,6 +5,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'hu.supercluster.paperwork'
+//apply from: '../keystore.gradle'
 
 //paperwork {
 //    set = [
@@ -25,6 +26,12 @@ android {
         versionName rootProject.versionName
     }
 
+    signingConfigs {
+        release
+    }
+
+    parseKeystoreProperties()
+
     buildTypes {
         debug {
             applicationIdSuffix ".dev"
@@ -32,8 +39,11 @@ android {
         }
 
         release {
-            minifyEnabled true
+            // will be enabled in future
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            signingConfig signingConfigs.release
         }
     }
 
@@ -85,6 +95,34 @@ dependencies {
     testCompile libraries.assertJ
     testCompile libraries.equalsVerifier
 //    testCompile libraries.mockitoCore
+}
+
+def parseKeystoreProperties() {
+    def properties = new Properties()
+    def keystoreFile = new File('keystore.properties')
+
+    if (keystoreFile.canRead()) {
+        properties.load(new FileInputStream(keystoreFile))
+
+        if (properties == null
+                || !properties.containsKey('STORE_FILE')
+                || !properties.containsKey('STORE_PASSWORD')
+                || !properties.containsKey('KEY_ALIAS')
+                || !properties.containsKey('KEY_PASSWORD')) {
+            android.buildTypes.release.signingConfig = null
+            println 'cannot parse keystore.properties'
+            return;
+        }
+
+        android.signingConfigs.release.storeFile = file(properties['STORE_FILE'])
+        android.signingConfigs.release.storePassword = properties['STORE_PASSWORD']
+        android.signingConfigs.release.keyAlias = properties['KEY_ALIAS']
+        android.signingConfigs.release.keyPassword = properties['KEY_PASSWORD']
+        println "keystore.properties was parsed successfully"
+    } else {
+        println "cannot find keystore.properties file"
+        android.buildTypes.release.signingConfig = null
+    }
 }
 
 retrolambda {

@@ -2,7 +2,7 @@ apply from: 'dependencies.gradle'
 
 ext {
     def versionMajor = 0
-    def versionMinor = 0
+    def versionMinor = 1
     def versionPatch = 1
     def versionBuild = 1
 

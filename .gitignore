@@ -8,3 +8,5 @@
 /outputs
 *.iml
 /.idea
+*.jks
+/keystore.properties

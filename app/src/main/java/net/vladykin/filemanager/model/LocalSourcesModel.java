@@ -2,6 +2,7 @@ package net.vladykin.filemanager.model;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import net.vladykin.filemanager.R;
 import net.vladykin.filemanager.entity.FileSourceItem;
@@ -26,13 +27,13 @@ import rx.Single;
 public final class LocalSourcesModel implements FilesSourcesModel {
 
     @NonNull private Context context;
-    @NonNull private File rootDirectory;
-    @NonNull private File localStorageDirectory;
+    @Nullable private File rootDirectory;
+    @Nullable private File localStorageDirectory;
 
     @Inject
     public LocalSourcesModel(@NonNull Context context,
-                             @NonNull File rootDirectory,
-                             @NonNull File localStorageDirectory) {
+                             @Nullable File rootDirectory,
+                             @Nullable File localStorageDirectory) {
         this.context = context;
         this.rootDirectory = rootDirectory;
         this.localStorageDirectory = localStorageDirectory;
@@ -48,8 +49,12 @@ public final class LocalSourcesModel implements FilesSourcesModel {
         items.add(imagesItem(context));
         items.add(audioItem(context));
         items.add(videoItem(context));
-        items.add(localStorageItem(context, localStorageDirectory));
-        items.add(rootItem(context, rootDirectory));
+        if (localStorageDirectory != null) {
+            items.add(localStorageItem(context, localStorageDirectory));
+        }
+        if (rootDirectory != null) {
+            items.add(rootItem(context, rootDirectory));
+        }
 
         return Single.just(items);
     }
