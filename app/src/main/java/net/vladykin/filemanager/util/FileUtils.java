@@ -39,7 +39,7 @@ public class FileUtils {
         //get file type
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         String fileName = file.getName();
-        String format = fileName.substring(fileName.indexOf(".") + 1).toLowerCase();
+        String format = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
         String mimeType = mime.getMimeTypeFromExtension(format);
 
         //if we don't know, what file it is
