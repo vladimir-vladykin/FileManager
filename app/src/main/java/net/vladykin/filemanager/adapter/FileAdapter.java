@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import net.vladykin.filemanager.R;
 import net.vladykin.filemanager.entity.FileItem;
 import net.vladykin.filemanager.util.FileSizeFormatter;
@@ -63,8 +65,12 @@ public final class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHold
         setSizeToHolder(holder.mFileSizeView, fileItem);
         holder.mFileLastModifiedView.setText(mFormat.format(fileItem.getLastModified()));
 
-        Bitmap icon = getIconByType(fileItem.getType());
-        holder.mImageView.setImageBitmap(icon);
+        if (fileItem.getType().equals(FileItem.Type.IMAGE)) {
+            loadImage(holder.mImageView, fileItem.getFile().getAbsolutePath());
+        } else {
+            Bitmap icon = getIconByType(fileItem.getType());
+            holder.mImageView.setImageBitmap(icon);
+        }
     }
 
     @Override
@@ -81,6 +87,14 @@ public final class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileHold
         } else {
             sizeTextView.setText(FileSizeFormatter.format(fileItem.getSize()));
         }
+    }
+
+    private void loadImage(final ImageView imageView, final String imagePath) {
+        Glide.with(imageView.getContext())
+                .load(new File(imagePath))
+                .placeholder(R.color.context_button_pressed) // todo maybe not the best color
+                .fitCenter()
+                .into(imageView);
     }
 
     private Bitmap getIconByType(final FileItem.Type type) {

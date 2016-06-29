@@ -34,6 +34,8 @@ public final class FileItem implements Serializable {
         boolean fileIsDirectory = mFile.isDirectory();
         if(fileIsDirectory) {
             mType = Type.DIRECTORY;
+        } else if (isFileImage(mName)) {
+            mType = Type.IMAGE;
         } else {
             //unknown file
             mType = Type.UNSPECIFIED;
@@ -108,6 +110,12 @@ public final class FileItem implements Serializable {
 
     public enum Type {
         UNSPECIFIED, // unknown file
-        DIRECTORY
+        DIRECTORY,
+        IMAGE
+    }
+
+    private boolean isFileImage(String fileName) {
+        // todo good enough for preview, but not production code
+        return fileName.endsWith(".jpg") || fileName.endsWith(".png");
     }
 }
